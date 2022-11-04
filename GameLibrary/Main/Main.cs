@@ -11,5 +11,14 @@ for (int turn = 1; turn <= 20; turn++)
 {
     int playerCardSelection = int.Parse(Console.ReadLine());
     int oponentCardSelection = int.Parse(Console.ReadLine());
+    if (playerCardSelection == -1)
+    {
+        playerA.energy += 2;
+        continue;
+    }
+    AttackAction.Attack(playerAfield[playerCardSelection], playerBfield[oponentCardSelection]);
+    playerA.energy -= 2;
+    if (playerBfield[oponentCardSelection].health <= 0)
+        playerBfield.RemoveAt(oponentCardSelection);
 
 }
