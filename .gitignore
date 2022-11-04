@@ -1,3 +1,5 @@
-GameLibrary/obj/Debug
+GameLibrary/obj
 GameLibrary/bin
+GameApp/obj
+GameApp/bin
 TODO
