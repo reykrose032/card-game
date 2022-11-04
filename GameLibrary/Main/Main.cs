@@ -1,41 +1,64 @@
 ﻿using Cards;
-using CardsActions;
+
 
 Player playerA = new Player();
 Player playerB = new Player();
-//suponiendo q cada player tiene sus respectivas cartas en mano
-List<Card> playerAfield = new List<Card>();
-List<Card> playerBfield = new List<Card>();
+
+List<Card> Ahand = new List<Card>();
+List<Card> Bhand = new List<Card>();
+
+List<Card> Afield = new List<Card>();
+List<Card> Bfield = new List<Card>();
 
 for (int turn = 1; turn <= 20; turn++)
 {
+    //fijando situacion del juego(player al q le toca jugar ,etc)
+    //mejorar clase player para evitar todo el reguero q hay en el if y else alla abajo feisimo
     Player player = new Player();
     Player enemyPlayer = new Player();
     List<Card> playerField = new List<Card>();
     List<Card> enemyField = new List<Card>();
+    List<Card> playerHand = new List<Card>();
+    List<Card> enemyHand = new List<Card>();
     if (turn % 2 != 0)//turno par=playerA playing,turno impar=playerB playing
     {
         player = playerA;
         enemyPlayer = playerB;
-        playerField = playerAfield;
-        enemyField = playerBfield;
+        playerField = Afield;
+        enemyField = Bfield;
+        playerHand = Ahand;
+        enemyHand = Bhand;
     }
     else
     {
         player = playerB;
         enemyPlayer = playerA;
-        playerField = playerBfield;
-        enemyField = playerAfield;
+        playerField = Bfield;
+        enemyField = Afield;
+        playerHand = Bhand;
+        enemyHand = Ahand;
     }
+    while (player.energy > 0)//invocando cartas
+    {
+        if (Console.ReadLine().ToLower() == "i")
+        {
+            int cardToInvoke = int.Parse(Console.ReadLine());
+            CardsActions.InvokeCard(playerHand[cardToInvoke], playerField);
+            PlayerActions.DecreaseEnergy(player, 2);
+        }
+        else
+            break;
+    }
+
     int playerCardSelection = int.Parse(Console.ReadLine());
     int targetCardSelection = int.Parse(Console.ReadLine());
-    if (playerCardSelection == -1)
-    {
+    if (playerCardSelection == -1)//-1 significaria q decidio pasar turno
         PlayerActions.IncreaseEnergy(player, 2);
-        continue;
+    else
+    {
+        CardsActions.Attack(playerField[playerCardSelection], enemyField[targetCardSelection]);
+        PlayerActions.DecreaseEnergy(player, 2);
+        if (enemyField[targetCardSelection].health <= 0)
+            enemyField.RemoveAt(targetCardSelection);
     }
-    AttackAction.Attack(playerField[playerCardSelection], enemyField[targetCardSelection]);
-    PlayerActions.DecreaseEnergy(player, 2);
-    if (enemyField[targetCardSelection].health <= 0)
-        enemyField.RemoveAt(targetCardSelection);
 }

@@ -1,12 +1,15 @@
 ﻿using Cards;
 
-namespace CardsActions
+
+public static class CardsActions
 {
-    public static class AttackAction
+    public static void Attack(Card cardA, Card cardB)//A ataca a B
     {
-        public static void Attack(Card A, Card B)//A ataca a B
-        {
-            A.health -= B.ATK;
-        }
+        cardA.health -= cardB.ATK;
+    }
+    public static void InvokeCard(Card card, List<Card> field)
+    {
+        field.Add(card);
     }
 }
+
