@@ -4,7 +4,7 @@ public class Game
 {
     public const int BoardSize = 4;
     public const int MaxNumberOfTurns = 20;
-    public int TurnCounter;
+    public int TurnCounter { get; set; }
     private Player Player1;
     private Player Player2;
     public Dictionary<Player, List<Card>> Board;
