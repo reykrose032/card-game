@@ -15,4 +15,9 @@ public class Card
         Health = health;
         Species = species;
     }
+
+    public Attack(Card card)
+    {
+        card.Health -= Attack;
+    }
 }

@@ -17,11 +17,22 @@ public class Player
         Hand = new();
     }
 
-    public InvokeCard(Card card)
+    public InvokeCard(Card card, Dictionary<Player, List<Card>> board)
     {
-        if (Hand.Contains(card))
+        if (Energy > 0 && Hand.Contains(card) && board[this].Count < Game.BoardSize)
         {
-            
+            board[this].Add(card);
+            Hand.Remove(card);
+        }
+
+        Energy--;
+    }
+
+    public DrawCard()
+    {
+        if (Deck.Count > 0)
+        {
+            Hand.Add(Deck.Dequeue());
         }
     }
 }
