@@ -15,20 +15,20 @@ public class Game
 
         Player1 = player1;
         Player2 = player2;
-        
+
         Board = new Dictionary<Player, List<Card>>();
         Board.Add(Player1, new List<Card>());
         Board.Add(Player2, new List<Card>());
     }
 
-    public bool IsTurnOf(Player player) => ((bool) TurnCounter % 2) ? player == Player2 : player == Player1;
+    public bool IsTurnOf(Player player) => (TurnCounter % 2 == 1) ? player == Player2 : player == Player1;
     public void PlayTurn(Player player)
     {
         if (IsTurnOf(player))
         {
             while (true)
             {
-                
+
             }
         }
     }

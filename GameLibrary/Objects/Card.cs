@@ -4,7 +4,7 @@ public class Card
 {
     public const int MinAttack = 0, MaxAttack = 100, MinHealth = 0, MaxHealth = 100;
     public string Name;
-    public int Attack;
+    public int AttackValue;
     public int Health;
     public Species Species;
 
@@ -16,8 +16,8 @@ public class Card
         Species = species;
     }
 
-    public Attack(Card card)
+    public void Attack(Card card)
     {
-        card.Health -= Attack;
+        card.Health -= AttackValue;
     }
 }
