@@ -49,6 +49,6 @@ public class Game
     }
 
     public bool HasLost(Player player)
-        => Player1.Deck.Count == 0 && Player1.Hand.Count == 0 && Board[Player1].Count(elem => elem == null) == BoardSize;
+        => player.Deck.Count == 0 && player.Hand.Count == 0 && Board[player].Count() == 0;
 
 }
