@@ -17,7 +17,7 @@ public class Player
         Hand = new();
     }
 
-    public InvokeCard(Card card, Dictionary<Player, List<Card>> board)
+    public void InvokeCard(Card card, Dictionary<Player, List<Card>> board)
     {
         if (Energy > 0 && Hand.Contains(card) && board[this].Count < Game.BoardSize)
         {
@@ -28,7 +28,7 @@ public class Player
         Energy--;
     }
 
-    public DrawCard()
+    public void DrawCard()
     {
         if (Deck.Count > 0)
         {
