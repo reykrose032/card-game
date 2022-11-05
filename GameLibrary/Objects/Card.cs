@@ -7,7 +7,7 @@ public class Card
     public int AttackValue { get; set; }
     public int Health { get; set; }
     public Species Species { get; set; }
-    public Int16 ASD;
+
     public Card(string name, int attack, int health, Species species)
     {
         Name = name;
