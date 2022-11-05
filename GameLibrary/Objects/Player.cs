@@ -16,4 +16,12 @@ public class Player
         Deck = deck;
         Hand = new();
     }
+
+    public InvokeCard(Card card)
+    {
+        if (Hand.Contains(card))
+        {
+            
+        }
+    }
 }

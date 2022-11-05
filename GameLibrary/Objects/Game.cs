@@ -21,18 +21,11 @@ public class Game
         Board.Add(Player2, new Card[BoardSize]);
     }
 
-    // public void Play()
-    // {
-    //     do
-    //     {
-    //         PlayTurn();
-    //     } while (!IsEndOfGame());
-    // }
-
-    // public void PlayTurn()
-    // {
-
-    // }
+    public bool IsTurnOf() => (bool) TurnCounter % 2;
+    public void EndTurn()
+    {
+        TurnCounter++;
+    }
 
     public bool IsEndOfGame()
     {
