@@ -11,7 +11,7 @@ public class Card
     public Card(string name, int attack, int health, Species species)
     {
         Name = name;
-        Attack = attack;
+        AttackValue = attack;
         Health = health;
         Species = species;
     }
