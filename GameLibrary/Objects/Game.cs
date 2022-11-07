@@ -5,8 +5,8 @@ public class Game
     public const int BoardSize = 4;
     public const int MaxNumberOfTurns = 20;
     public int TurnCounter { get; set; }
-    private Player Player1;
-    private Player Player2;
+    public Player Player1;
+    public Player Player2;
     public Dictionary<Player, List<Card>> Board;
 
     public Game(Player player1, Player player2)
@@ -20,18 +20,28 @@ public class Game
         Board.Add(Player1, new List<Card>());
         Board.Add(Player2, new List<Card>());
     }
-
-    public bool IsTurnOf(Player player) => (TurnCounter % 2 == 1) ? player == Player2 : player == Player1;
-    public void PlayTurn(Player player)
+    public void UpdateBoard()
     {
-        if (IsTurnOf(player))
+        foreach (var playerBoard in Board.Values)
         {
-            while (true)
+            foreach (var card in playerBoard.ToList())
             {
-
+                if (card.Health <= 0)
+                {
+                    playerBoard.Remove(card);
+                }
             }
         }
     }
+    public Player IsTurnOf()
+    {
+        return (TurnCounter % 2 == 0) ? Player1 : Player2;
+    }
+    public Player IsNotTurnOf()
+    {
+        return (TurnCounter % 2 == 1) ? Player1 : Player2;
+    }
+
     public void EndTurn()
     {
         TurnCounter++;
