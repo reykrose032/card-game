@@ -1,5 +1,6 @@
 ﻿using GameLibrary;
 using GameLibrary.Objects;
+using Utils;
 
 class Program
 {
@@ -101,26 +102,15 @@ class Program
     static void InvokeCard(Player currentPlayer, Dictionary<Player, List<Card>> board)
     {
         System.Console.WriteLine("Choose card to invoke:");
-        foreach (var card in currentPlayer.Hand)
-        {
-            Console.Write($"{currentPlayer.Hand.IndexOf(card)} - {card.Name}, ");
-        }
+        Print.PlayerChoices(currentPlayer.Hand);
         System.Console.WriteLine();
 
         var userInput = Console.ReadKey();
         System.Console.WriteLine();
-        if (!char.IsDigit(userInput.KeyChar))
-        {
-            System.Console.WriteLine("Key is not a digit.");
-            return;
-        }
+        if (!Input.IsValidInput(userInput)) return;
 
         var cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (cardIndex >= currentPlayer.Hand.Count)
-        {
-            System.Console.WriteLine("Wrong key! Not a card in there.");
-            return;
-        }
+        if (!Input.IsValidInput(cardIndex, currentPlayer.Hand.Count)) return;
 
         var cardToInvoke = currentPlayer.Hand.ElementAt(cardIndex);
         currentPlayer.Invoke(cardToInvoke, board);
@@ -129,49 +119,27 @@ class Program
     static void AttackCard(Player currentPlayer, Player currentOpponent, Dictionary<Player, List<Card>> board)
     {
         System.Console.WriteLine("Choose attacking card:");
-        foreach (var card in board[currentPlayer])
-        {
-            Console.Write($"{board[currentPlayer].IndexOf(card)} - {card.Name}, ");
-        }
+        Print.PlayerChoices(board[currentPlayer]);
         System.Console.WriteLine();
 
         var userInput = Console.ReadKey();
         System.Console.WriteLine();
-        if (!char.IsDigit(userInput.KeyChar))
-        {
-            System.Console.WriteLine("Key is not a digit.");
-            return;
-        }
+        if (Input.IsValidInput(userInput)) return;
 
         var cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (cardIndex >= board[currentPlayer].Count)
-        {
-            System.Console.WriteLine("Wrong key! Not a card in there.");
-            return;
-        }
+        if (!Input.IsValidInput(cardIndex, board[currentPlayer].Count)) return;
 
         var attackingCard = board[currentPlayer].ElementAt(cardIndex);
 
         System.Console.WriteLine("Choose card to attack:");
-        foreach (var card in board[currentOpponent])
-        {
-            Console.Write($"{board[currentOpponent].IndexOf(card)} - {card.Name}, ");
-        }
+        Print.PlayerChoices(board[currentOpponent]);
         System.Console.WriteLine();
 
         userInput = Console.ReadKey();
-        if (!char.IsDigit(userInput.KeyChar))
-        {
-            System.Console.WriteLine("Key is not a digit.");
-            return;
-        }
+        if (Input.IsValidInput(userInput)) return;
 
         cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (cardIndex >= board[currentOpponent].Count)
-        {
-            System.Console.WriteLine("Wrong key! Not a card in there.");
-            return;
-        }
+        if (!Input.IsValidInput(cardIndex, board[currentOpponent].Count)) return;
 
         var cardToAttack = board[currentOpponent].ElementAt(cardIndex);
 
