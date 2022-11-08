@@ -6,8 +6,8 @@ class Program
     static void Main(string[] args)
     {
         var card1 = new Card("Angel", 80, 80, Species.Angel);
-        var card2 = new Card("Pancho", 80, 80, Species.Cthulhu);
-        var card3 = new Card("Rudy", 80, 80, Species.Dragon);
+        var card2 = new Card("Pancho", 75, 40, Species.Cthulhu);
+        var card3 = new Card("Rudy", 50, 100, Species.Dragon);
 
         var deck1 = new Queue<Card>();
         deck1.Enqueue(card1);
@@ -15,8 +15,14 @@ class Program
         deck1.Enqueue(card3);
         var player1 = new Player("Kevin", deck1);
         var player2 = new Player("AI", deck1);
+
         var game = new Game(player1, player2);
-        
-        Console.WriteLine(game.IsEndOfGame());
+        while (true)
+        {
+            var currentPlayer = game.IsTurnOf();
+            var opponentPlayer = game.IsNotTurnOf();
+
+        }
+
     }
 }
