@@ -23,17 +23,9 @@ public class Game
         Board.Add(Player2, new List<Card>());
     }
 
-    public bool IsTurnOf(Player player) => (TurnCounter % 2 == 1) ? player == Player2 : player == Player1;
-    public void PlayTurn(Player player)
-    {
-        if (IsTurnOf(player))
-        {
-            while (true)
-            {
+    public Player IsTurnOf() => (TurnCounter % 2 == 0) ? Player1 : Player2;
+    public Player IsNotTurnOf() => (TurnCounter % 2 == 0) ? Player2 : Player1;
 
-            }
-        }
-    }
     public void EndTurn()
     {
         TurnCounter++;
@@ -52,8 +44,6 @@ public class Game
 
     public bool HasLost(Player player)
         => player.Deck.Count == 0 && player.Hand.Count == 0 && Board[player].Count == 0;
-
-
     public int GetSurvivorScored(Player player)//retorna la suma de la vida las cartas(en campo) del player(para q sirve? 
     //pues se me ocurrio una idea,q hacer si se acaban los turnos?quien ganaria?pues gana el q tenga mayor suma total de la 
     //vida se sus cartas,lo cual seria el score)
