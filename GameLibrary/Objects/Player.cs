@@ -35,4 +35,12 @@ public class Player
             Hand.Add(Deck.Dequeue());
         }
     }
+
+    public void Draw(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            Draw();
+        }
+    }
 }

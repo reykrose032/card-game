@@ -6,26 +6,25 @@ class Program
 {
     static void Main(string[] args)
     {
-        var deck1 = GenerateDeck(4);
-        var deck2 = GenerateDeck(4);
+        var deck1 = GenerateDeck(8);
+        var deck2 = GenerateDeck(8);
 
         var player1 = new Player("Kevin", deck1);
         var player2 = new Player("AI", deck2);
 
         var game = new Game(player1, player2);
 
+        Play(game);
+    }
+
+    static void Play(Game game)
+    {
         while (!game.IsEndOfGame())
         {
             bool endTurn = false;
 
             var currentPlayer = game.IsTurnOf();
             var currentOpponent = game.IsNotTurnOf();
-
-            if (game.TurnCounter % 2 == 0)
-            {
-                currentPlayer.Draw();
-                currentOpponent.Draw();
-            }
 
             Console.WriteLine($"Is {currentPlayer.Name}'s turn:");
 
@@ -35,6 +34,7 @@ class Program
                 Console.WriteLine("I: Invoke Card, A: Attack, <Enter>: End Turn");
 
                 var action = Console.ReadKey();
+                System.Console.WriteLine();
                 switch (action.Key)
                 {
                     case ConsoleKey.I:
@@ -77,6 +77,12 @@ class Program
             }
 
             game.EndTurn();
+            
+            if (game.TurnCounter % 2 == 0)
+            {
+                currentPlayer.Draw();
+                currentOpponent.Draw();
+            }
         }
     }
 
@@ -99,49 +105,43 @@ class Program
         return cards;
     }
 
-    static void InvokeCard(Player currentPlayer, Dictionary<Player, List<Card>> board)
+    static Card PickCardFrom(List<Card> cards)
     {
-        System.Console.WriteLine("Choose card to invoke:");
-        Print.PlayerChoices(currentPlayer.Hand);
-        System.Console.WriteLine();
+        Print.PlayerCards(cards);
 
         var userInput = Console.ReadKey();
         System.Console.WriteLine();
-        if (!Input.IsValidInput(userInput)) return;
+        if (!InputValidation.IsDigit(userInput))  
+            return null;
 
         var cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (!Input.IsValidInput(cardIndex, currentPlayer.Hand.Count)) return;
+        if (!InputValidation.IsIndexOutOfBounds(cardIndex, cards.Count)) 
+            return null;
 
-        var cardToInvoke = currentPlayer.Hand.ElementAt(cardIndex);
+        return cards.ElementAt(cardIndex);
+    }
+
+    static void InvokeCard(Player currentPlayer, Dictionary<Player, List<Card>> board)
+    {
+        System.Console.WriteLine("Choose card to invoke:");
+        var cardToInvoke = PickCardFrom(currentPlayer.Hand);
+        if (cardToInvoke == null)
+            return;
+        
         currentPlayer.Invoke(cardToInvoke, board);
     }
 
     static void AttackCard(Player currentPlayer, Player currentOpponent, Dictionary<Player, List<Card>> board)
     {
         System.Console.WriteLine("Choose attacking card:");
-        Print.PlayerChoices(board[currentPlayer]);
-        System.Console.WriteLine();
-
-        var userInput = Console.ReadKey();
-        System.Console.WriteLine();
-        if (Input.IsValidInput(userInput)) return;
-
-        var cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (!Input.IsValidInput(cardIndex, board[currentPlayer].Count)) return;
-
-        var attackingCard = board[currentPlayer].ElementAt(cardIndex);
+        var attackingCard = PickCardFrom(board[currentPlayer]);
+        if (attackingCard == null)
+            return;
 
         System.Console.WriteLine("Choose card to attack:");
-        Print.PlayerChoices(board[currentOpponent]);
-        System.Console.WriteLine();
-
-        userInput = Console.ReadKey();
-        if (Input.IsValidInput(userInput)) return;
-
-        cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (!Input.IsValidInput(cardIndex, board[currentOpponent].Count)) return;
-
-        var cardToAttack = board[currentOpponent].ElementAt(cardIndex);
+        var cardToAttack = PickCardFrom(board[currentOpponent]);
+        if (cardToAttack == null)
+            return;
 
         attackingCard.Attack(cardToAttack);
     }

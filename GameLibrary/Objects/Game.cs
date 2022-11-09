@@ -4,6 +4,7 @@ public class Game
 {
     public const int BoardSize = 4;
     public const int MaxNumberOfTurns = 20;
+    public const int NumberOfCardsForInitialDraw = 3;
     public int TurnCounter { get; set; }
     public Player Player1;
     public Player Player2;
@@ -19,6 +20,13 @@ public class Game
         Board = new Dictionary<Player, List<Card>>();
         Board.Add(Player1, new List<Card>());
         Board.Add(Player2, new List<Card>());
+
+        InitialDraw();
+    }
+    private void InitialDraw()
+    {
+        Player1.Draw(NumberOfCardsForInitialDraw);
+        Player2.Draw(NumberOfCardsForInitialDraw);
     }
     public void UpdateBoard()
     {
