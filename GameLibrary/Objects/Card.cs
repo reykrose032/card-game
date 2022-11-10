@@ -26,4 +26,9 @@ public class Card
 
     public int ComputeHealth() => random.Next(MinHealth, MaxHealth);
 
+    public override string ToString()
+    {
+        return "{ " + $"name: {Name}, species: {Species}, attack: {AttackValue}, health: {Health}" + " }";
+    }
+
 }

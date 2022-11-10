@@ -30,6 +30,7 @@ class Program
 
             while (!endTurn)
             {
+                Print.Board(game.Board);
                 Console.WriteLine("Choose an action:");
                 Console.WriteLine("I: Invoke Card, A: Attack, <Enter>: End Turn");
 
@@ -81,7 +82,9 @@ class Program
             if (game.TurnCounter % 2 == 0)
             {
                 currentPlayer.Draw();
+                currentPlayer.Energy++;
                 currentOpponent.Draw();
+                currentOpponent.Energy++;
             }
         }
     }
