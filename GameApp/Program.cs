@@ -1,6 +1,7 @@
 ﻿using GameLibrary;
 using GameLibrary.Objects;
 using Utils;
+using MiniCompiler;
 
 class Program
 {
@@ -8,6 +9,10 @@ class Program
     {
         var deck1 = GenerateDeck(4);
         var deck2 = GenerateDeck(4);
+        //testing the compiler by adding a new card to the deck1
+        string userCodeInput = "Name: Franco Hernandez ; ATK: 10 ; Health: 20 ; Specie: Angel ;";
+        Interpreter interpreter = new Interpreter(userCodeInput);
+        deck1.Enqueue(new Card(interpreter.newCardName, interpreter.newCardSpecie));
 
         var player1 = new Player("Kevin", deck1);
         var player2 = new Player("AI", deck2);
