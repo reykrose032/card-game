@@ -132,7 +132,7 @@ class Program
 
         var userInput = Console.ReadKey();
         System.Console.WriteLine();
-        if (Input.IsValidInput(userInput)) return;
+        if (!Input.IsValidInput(userInput)) return;
 
         var cardIndex = int.Parse(userInput.KeyChar.ToString());
         if (!Input.IsValidInput(cardIndex, board[currentPlayer].Count)) return;
@@ -144,7 +144,7 @@ class Program
         System.Console.WriteLine();
 
         userInput = Console.ReadKey();
-        if (Input.IsValidInput(userInput)) return;
+        if (!Input.IsValidInput(userInput)) return;
 
         cardIndex = int.Parse(userInput.KeyChar.ToString());
         if (!Input.IsValidInput(cardIndex, board[currentOpponent].Count)) return;
