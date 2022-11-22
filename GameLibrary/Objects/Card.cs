@@ -10,13 +10,6 @@ public class Card
     public Species Specie { get; set; }
     Random random = new Random();
 
-    public Card(string name, Species species)
-    {
-        Name = name;
-        Specie = species;
-        AttackValue = ComputeAttack();
-        Health = ComputeHealth();
-    }
     public Card(string name, int attackValue, int health, Species specie)
     {
         Name = name;
@@ -24,6 +17,14 @@ public class Card
         Health = health;
         Specie = specie;
     }
+    public Card(string name, Species species)
+    {
+        Name = name;
+        Specie = species;
+        AttackValue = ComputeAttack();
+        Health = ComputeHealth();
+    }
+
 
     public void Attack(Card card)
     {
@@ -33,5 +34,4 @@ public class Card
     public int ComputeAttack() => random.Next(MinAttack, MaxAttack);
 
     public int ComputeHealth() => random.Next(MinHealth, MaxHealth);
-
 }

@@ -12,7 +12,7 @@ class Program
         //testing the compiler by adding a new card to the deck1
         string userCodeInput = "Name: Franco Hernandez ; ATK: 10 ; Health: 20 ; Specie: Angel ;";
         Interpreter interpreter = new Interpreter(userCodeInput);
-        deck1.Enqueue(new Card(interpreter.newCardName, interpreter.newCardSpecie));
+        deck1.Enqueue(new Card(interpreter.newCardName, interpreter.newCardATK, interpreter.newCardHealth, interpreter.newCardSpecie));
 
         var player1 = new Player("Kevin", deck1);
         var player2 = new Player("AI", deck2);
@@ -62,7 +62,10 @@ class Program
                             System.Console.WriteLine("You don't have cards in the board.");
                             break;
                         }
-                        if (game.Board[currentOpponent].Count == 0)
+                        if (game.Board[currentOpponent].Count == 0)//hay q pensar sobre esto ,pq se supoo=ne qq nunca te quedes sin cartas
+                        //ya q los player no tienen vida,es decir si te quedas sin cartas en el campo,entonces eres invulnerable,yo creo
+                        //q deberia ser mejor poner de regla q si te quedas sin cartas en campo,pierdes.Tampoco es literal asi,por ejemp
+                        //si tengo una carta restante y me la destruyen entonces pierdo?no lo veo justo,tenemos q pensar sobre esto...
                         {
                             System.Console.WriteLine("No Opponent card to attack.");
                             break;
