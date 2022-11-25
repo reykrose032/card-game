@@ -3,7 +3,7 @@ namespace MiniCompiler
 {
     public enum TokenType
     {
-        NAME, HEALTH, ATK, SPECIE, EOF
+        NAME, HEALTH, ATK, SPECIE, ACTION, IDENTIFIER, NUMBER, PLUS, MINUS, MULT, DIV, EOF
     }
     public class Token
     {

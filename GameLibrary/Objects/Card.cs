@@ -2,11 +2,14 @@ namespace GameLibrary.Objects;
 
 public class Card
 {
-    public const int MinAttack = 0, MaxAttack = 50, MinHealth = 0, MaxHealth = 100, MinValue = 50, MaxValue = 100;
+    public const int MinAttack = 0, MaxAttack = 50, MinHealth = 0, MaxHealth = 100;
 
     public string Name { get; set; }
     public int AttackValue { get; set; }
+    public int MaxAttackValue { get; set; }
     public int Health { get; set; }
+    public int MaxHealthValue { get; set; }
+    public Effect effect { get; set; }
     public Species Specie { get; set; }
     Random random = new Random();
 
@@ -31,7 +34,7 @@ public class Card
         card.Health -= AttackValue;
     }
 
-    public int ComputeAttack() => random.Next(MinAttack, MaxAttack);
+    int ComputeAttack() => random.Next(MinAttack, MaxAttack);
 
-    public int ComputeHealth() => random.Next(MinHealth, MaxHealth);
+    int ComputeHealth() => random.Next(MinHealth, MaxHealth);
 }
