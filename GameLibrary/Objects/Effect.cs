@@ -24,7 +24,7 @@ public class ClientEffect : Effect, IEffect
 
     public void ActivateEffect()
     {
-        Interpreter.ActivateClientEffect(ownCard, enemyCard);
+
     }
 }
 public class Weaken : Effect, IEffect

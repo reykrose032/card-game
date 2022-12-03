@@ -3,6 +3,7 @@ using GameLibrary.Objects;
 
 namespace MiniCompiler
 {
+
     public class Interpreter //modificar la implementacion grafica de effectos para utilizar y probar el funcionamiento de Effect // introducir condicionales
     {
         string input = "";
@@ -11,98 +12,66 @@ namespace MiniCompiler
         public int newInitialCardHealth;
         public Species newInitialCardSpecie;
         List<string> splitedInput = new List<string>(); //Poseera string de la entrada del usuario 
-        List<Token> propertiesTokens = new List<Token>(); //poseera los tokens Mas generales(ningun subtoken)
-        List<Token> actionTokens = new List<Token>(); //lista con los tokens creados "a partir" del Token Action
-        Dictionary<string, int> quantumVariables = new Dictionary<string, int>(); //relaciona cada nombre de variable con su valor
-
+        List<Token> tokens = new List<Token>();
+        GodTree arbolGod = new GodTree();
+        public static Dictionary<string, int> cardsStatsDic = new Dictionary<string, int>(); //relaciona cada nombre de variable con su valor
 
         public Interpreter(string input)
         {
             this.input = input;
             Tokenizing(); //creando tokens a partir de la entrada del usuario
-            ParseCardPropierties(); //asignandole valores a las propiedades de la carta nueva. Example: newInitialCardName,etc
+            ParseGod(arbolGod.instructions, 0);
         }
-
-
-        public void ActivateClientEffect(Card ownCard, Card enemyCard)
+        public void ExecuteCode()
         {
-            if (quantumVariables == null)
-                FillQuantumDictionary(ownCard, enemyCard);
-            else
-                UpdateQuantumVariablesStats(ownCard, enemyCard);
-            TokenizingActionTokens();
-            ParseTokenAction();
-            UpdateCardStats(ownCard, enemyCard);
+            arbolGod.Execute();
         }
 
 
-        //tokeniza los "subtokens" q se encuentran en el string del TokenAction
-        void TokenizingActionTokens()
+        public void FillQuantumDictionary(Card ownCard, Card enemyCard)
         {
-            //splitea el token ACTION q es el ultimo de la lista propertiesToken del cual tokenizaaremos aun mas...
-            //los tokens siguientes podrian verlo como subtokens del token Action
-            splitedInput = propertiesTokens[propertiesTokens.Count - 1].represent.Split(' ', StringSplitOptions.TrimEntries).ToList();
+            cardsStatsDic.Add("ownCard.Health", ownCard.Health);
+            cardsStatsDic.Add("ownCard.MaxHealth", ownCard.MaxHealthValue);
+            cardsStatsDic.Add("ownCard.AttackValue", ownCard.AttackValue);
+            cardsStatsDic.Add("ownCard.MaxAttackValue", ownCard.MaxAttackValue);
 
-            for (int position = 0; position < splitedInput.Count; position++)
-            {
-                if (IsNumber(splitedInput[position]))
-                    actionTokens.Add(new Token(TokenType.NUMBER, "", int.Parse(splitedInput[position])));
-                else if (splitedInput[position] == "+")
-                    actionTokens.Add(new Token(TokenType.PLUS, "+"));
-                else if (splitedInput[position] == "-")
-                    actionTokens.Add(new Token(TokenType.MINUS, "-"));
-                else if (splitedInput[position] == "*")
-                    actionTokens.Add(new Token(TokenType.MULT, "*"));
-                else if (splitedInput[position] == "/")
-                    actionTokens.Add(new Token(TokenType.DIV, "/"));
-                else if (splitedInput[position] == "=")
-                    continue;
-                else if (splitedInput[position] == ";")
-                    continue;
-                else
-                    actionTokens.Add(new Token(TokenType.IDENTIFIER, splitedInput[position], quantumVariables[splitedInput[position]]));
-            }
+            cardsStatsDic.Add("enemyCard.Health", enemyCard.Health);
+            cardsStatsDic.Add("ownCard.MaxHealth", enemyCard.MaxHealthValue);
+            cardsStatsDic.Add("enemyCard.AttackValue", enemyCard.AttackValue);
+            cardsStatsDic.Add("enemyCard.MaxAttackValue", enemyCard.MaxAttackValue);
         }
-
-
-        void ParseTokenAction()//examp:card.ATK=card.ATK*2;//se q esta feo,repetitivo,pero estoy priorizando funcionalidad,luego veremos como arreglar esto
-        {
-            //modificando la estadistica objetiva 
-            quantumVariables[actionTokens[0].represent] = CalculateExpresion(actionTokens);
-        }
-
 
         //esto es para modificar las estadisticas de las cartas 
         public void UpdateCardStats(Card ownCard, Card enemyCard)
         {
-            ownCard.Health = quantumVariables["ownCard.Health"];
-            ownCard.MaxHealthValue = quantumVariables["ownCard.MaxHealthValue"];
-            ownCard.AttackValue = quantumVariables["ownCard.AttackValue"];
-            ownCard.MaxAttackValue = quantumVariables["ownCard.MaxAttackValue"];
+            ownCard.Health = cardsStatsDic["ownCard.Health"];
+            ownCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
+            ownCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
+            ownCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
 
-            enemyCard.Health = quantumVariables["ownCard.Health"];
-            enemyCard.MaxHealthValue = quantumVariables["ownCard.MaxHealthValue"];
-            enemyCard.AttackValue = quantumVariables["ownCard.AttackValue"];
-            enemyCard.MaxAttackValue = quantumVariables["ownCard.MaxAttackValue"];
+            enemyCard.Health = cardsStatsDic["ownCard.Health"];
+            enemyCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
+            enemyCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
+            enemyCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
         }
 
 
         //esto es para modificar las estadisticas del diccionario quantumVariables
-        public void UpdateQuantumVariablesStats(Card ownCard, Card enemyCard)
+        public void UpdateCardStatsDic(Card ownCard, Card enemyCard)
         {
-            quantumVariables["ownCard.Health"] = ownCard.Health;
-            quantumVariables["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
-            quantumVariables["ownCard.AttackValue"] = ownCard.AttackValue;
-            quantumVariables["ownCard.MaxAttackValue"] = ownCard.MaxAttackValue;
+            cardsStatsDic["ownCard.Health"] = ownCard.Health;
+            cardsStatsDic["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
+            cardsStatsDic["ownCard.AttackValue"] = ownCard.AttackValue;
+            cardsStatsDic["ownCard.MaxAttackValue"] = ownCard.MaxAttackValue;
 
-            quantumVariables["ownCard.Health"] = enemyCard.Health;
-            quantumVariables["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
-            quantumVariables["ownCard.AttackValue"] = enemyCard.AttackValue;
-            quantumVariables["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
+            cardsStatsDic["ownCard.Health"] = enemyCard.Health;
+            cardsStatsDic["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
+            cardsStatsDic["ownCard.AttackValue"] = enemyCard.AttackValue;
+            cardsStatsDic["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
         }
 
 
-        //tokenizando para guardar tokens en lista propertiesTokens
+        //tokenizando para guardar tokens en lista Tokens
         void Tokenizing()
         {
             splitedInput = input.Split(' ', StringSplitOptions.TrimEntries).ToList();
@@ -111,73 +80,139 @@ namespace MiniCompiler
                 switch (splitedInput[position])
                 {
                     case "Name:":
-                        propertiesTokens.Add(new Token(TokenType.NAME, AddStringFromPositionToEOF(position + 1)));
+                        tokens.Add(new Token(TokenType.NAME, AddStringFromPositionToEOF(position + 1)));
                         break;
-                    case "Health:":
-                        propertiesTokens.Add(new Token(TokenType.HEALTH, "", int.Parse(splitedInput[position + 1])));
-                        splitedInput.RemoveAt(position + 1);
+                    case "InitialHealth:":
+                        tokens.Add(new Token(TokenType.HEALTH, splitedInput[position + 1]));
                         break;
-                    case "ATK:":
-                        propertiesTokens.Add(new Token(TokenType.ATK, "", int.Parse(splitedInput[position + 1])));
-                        splitedInput.RemoveAt(position + 1);
+                    case "InitialATK:":
+                        tokens.Add(new Token(TokenType.ATK, splitedInput[position + 1]));
                         break;
                     case "Specie:":
-                        propertiesTokens.Add(new Token(TokenType.SPECIE, GetSpecieFromString(splitedInput[position + 1])));
+                        tokens.Add(new Token(TokenType.SPECIE, GetSpecieFromString(splitedInput[position + 1])));
                         break;
-                    case "EffectAction:":
-                        propertiesTokens.Add(new Token(TokenType.ACTION, AddStringFromPositionToEOF(position + 1)));
+                    case "IF:":
+                        tokens.Add(new Token(TokenType.IF));
+                        break;
+                    case "EndIF":
+                        tokens.Add(new Token(TokenType.END));
+                        break;
+                    case "+":
+                        tokens.Add(new Token(TokenType.PLUS, "+"));
+                        break;
+                    case "-":
+                        tokens.Add(new Token(TokenType.MULT, "-"));
+                        break;
+                    case "*":
+                        tokens.Add(new Token(TokenType.MINUS, "*"));
+                        break;
+                    case "/":
+                        tokens.Add(new Token(TokenType.DIV, "/"));
                         break;
                     case ";":
-                        propertiesTokens.Add(new Token(TokenType.EOF));
+                        tokens.Add(new Token(TokenType.END));
                         break;
                     default:
                         break;
                 }
+                if (IsNumber(splitedInput[position]))
+                    tokens.Add(new Token(TokenType.NUMBER, splitedInput[position]));
+                else if (splitedInput[position].Contains("Card"))
+                    tokens.Add(new Token(TokenType.IDENTIFIER, splitedInput[position]));
             }
         }
 
-
-        //asigna a las propiedades de la nueva carta ,por ejemplo newInitialCard.Health,el valor q introducido por el usuario
-        void ParseCardPropierties()
+        void ParseGod(List<Iinstruction> instructionsList, int InitialPosition)
         {
-            for (int i = 0; i < propertiesTokens.Count; i++)
+            for (int position = InitialPosition; position < tokens.Count; position++)
             {
-                switch (propertiesTokens[i].type)
+                if (tokens[position].type == TokenType.IDENTIFIER)
+                    instructionsList.Add(new Assignment(tokens[position], ParseExpr(position)));
+                else if (tokens[position].type == TokenType.IF)
                 {
-                    case TokenType.NAME:
-                        newInitialCardName = propertiesTokens[i].represent;
-                        break;
-                    case TokenType.HEALTH:
-                        newInitialCardHealth = propertiesTokens[i].value;
-                        break;
-                    case TokenType.ATK:
-                        newInitialCardATK = propertiesTokens[i].value;
-                        break;
-                    case TokenType.SPECIE:
-                        newInitialCardSpecie = propertiesTokens[i].specie;
-                        break;
-                    case TokenType.EOF:
-                        continue;
-                    default:
-                        break;
+                    List<Iinstruction> newIfInstructionList = new List<Iinstruction>();
+                    ParseGod(newIfInstructionList, position);
+                    instructionsList.Add(new IF(ParseExpr(position), newIfInstructionList));
                 }
+                else if (tokens[position].type == TokenType.END)
+                    break;
             }
         }
 
-
-        public void FillQuantumDictionary(Card ownCard, Card enemyCard)
+        IExpr ParseExpr(int startOfExpr)
         {
-            quantumVariables.Add("ownCard.Health", ownCard.Health);
-            quantumVariables.Add("ownCard.MaxHealth", ownCard.MaxHealthValue);
-            quantumVariables.Add("ownCard.AttackValue", ownCard.AttackValue);
-            quantumVariables.Add("ownCard.MaxAttackValue", ownCard.MaxAttackValue);
+            Stack<IExpr> stack = new Stack<IExpr>();
+            for (int position = startOfExpr; ; position++)
+            {
+                if (tokens[position].type == TokenType.END)
+                {
+                    tokens.RemoveAt(position); //lo remuevo ya q ParseGod se detiene cuando encuentra un token tipo END
+                    break;
+                }
+                if (tokens[position].type == TokenType.NUMBER)
+                {
+                    stack.Push(new Number(int.Parse(tokens[position].value)));
+                    tokens.RemoveAt(position);
+                }
+                else if (tokens[position].type == TokenType.IDENTIFIER)
+                {
+                    stack.Push(new Identifier(tokens[position].value));
+                    tokens.RemoveAt(position);
+                }
+                else if (stack.Count >= 2)
+                {
+                    var right = stack.Pop(); //el orden importa
+                    var left = stack.Pop();
 
-            quantumVariables.Add("enemyCard.Health", enemyCard.Health);
-            quantumVariables.Add("ownCard.MaxHealth", enemyCard.MaxHealthValue);
-            quantumVariables.Add("enemyCard.AttackValue", enemyCard.AttackValue);
-            quantumVariables.Add("enemyCard.MaxAttackValue", enemyCard.MaxAttackValue);
+                    if (tokens[position].type == TokenType.PLUS)
+                    {
+                        stack.Push(new Plus(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.MINUS)
+                    {
+                        stack.Push(new Minus(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.MULT)
+                    {
+                        stack.Push(new Mult(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.DIV)
+                    {
+                        stack.Push(new Div(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.HIGHER)
+                    {
+                        stack.Push(new Higher(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.MINOR)
+                    {
+                        stack.Push(new Minor(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.SAME)
+                    {
+                        stack.Push(new Same(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.AND)
+                    {
+                        stack.Push(new AND(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                    else if (tokens[position].type == TokenType.OR)
+                    {
+                        stack.Push(new OR(left, right));
+                        tokens.RemoveAt(position);
+                    }
+                }
+            }
+            return stack.Pop();
         }
-
 
         //dado un string,este devuelve la especie a la q se refiere
         Species GetSpecieFromString(string input)
@@ -206,48 +241,9 @@ namespace MiniCompiler
             {
                 result += splitedInput[position];
                 result += " ";
-                splitedInput.RemoveAt(position);
+                position++;
             }
             return result;
-        }
-
-
-        //calcula la expresion a asignarle a la variable a modificar(modificar metodo para hacerlo modular y reusable,Deberia calcular 
-        //simplemente la expresion calculable dada)
-        //REQUIERE OPTIMIZACION IMPORTANTE
-        int CalculateExpresion(List<Token> actionTokens)
-        {
-            for (int position = 1; position < actionTokens.Count; position++)
-            {
-                if (actionTokens[position].type == TokenType.MULT)
-                {
-                    actionTokens[position].value = actionTokens[position - 1].value * actionTokens[position + 1].value;
-                    actionTokens.RemoveAt(position - 1);
-                    actionTokens.RemoveAt(position + 1);
-                }
-                else if (actionTokens[position].type == TokenType.DIV)
-                {
-                    actionTokens[position].value = actionTokens[position - 1].value / actionTokens[position + 1].value;
-                    actionTokens.RemoveAt(position - 1);
-                    actionTokens.RemoveAt(position + 1);
-                }
-            }
-            for (int position = 1; position < actionTokens.Count; position++)
-            {
-                if (actionTokens[position].type == TokenType.PLUS)
-                {
-                    actionTokens[position].value = actionTokens[position - 1].value + actionTokens[position + 1].value;
-                    actionTokens.RemoveAt(position - 1);
-                    actionTokens.RemoveAt(position + 1);
-                }
-                else if (actionTokens[position].type == TokenType.MINUS)
-                {
-                    actionTokens[position].value = actionTokens[position - 1].value - actionTokens[position + 1].value;
-                    actionTokens.RemoveAt(position - 1);
-                    actionTokens.RemoveAt(position + 1);
-                }
-            }
-            return actionTokens[1].value;
         }
 
 

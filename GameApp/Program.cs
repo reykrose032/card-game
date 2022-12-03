@@ -12,9 +12,6 @@ class Program
         //testing the compiler by adding a new card to the deck1
         string userCodeInput = "Name: Franco Hernandez ; ATK: 10 ; Health: 20 ; Specie: Angel ; EffectAction: card.Health = card.MaxHealth ;";
         Interpreter interpreter = new Interpreter(userCodeInput);//agregar TokenType.NONE para no tener angel por default
-        Card ClientCard = new Card(interpreter.newInitialCardName, interpreter.newInitialCardATK, interpreter.newInitialCardHealth, interpreter.newInitialCardSpecie);
-        ClientCard.effect = new ClientEffect(ClientCard, deck1.ElementAt(0), interpreter);
-        deck1.Enqueue(ClientCard);
 
         var player1 = new Player("Kevin", deck1);
         var player2 = new Player("AI", deck2);

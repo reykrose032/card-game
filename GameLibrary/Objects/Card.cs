@@ -9,7 +9,7 @@ public class Card
     public int MaxAttackValue { get; set; }
     public int Health { get; set; }
     public int MaxHealthValue { get; set; }
-    public Effect effect { get; set; }
+
     public Species Specie { get; set; }
     Random random = new Random();
 
