@@ -14,45 +14,34 @@ namespace MiniCompiler
         List<string> splitedInput = new List<string>(); //Poseera string de la entrada del usuario 
         List<Token> tokens = new List<Token>();
         GodTree arbolGod = new GodTree();
-        public static Dictionary<string, int> cardsStatsDic = new Dictionary<string, int>(); //relaciona cada nombre de variable con su valor
+        public static Dictionary<string, int> cardsStatsDic = new Dictionary<string, int>(); //relaciona cada nombre de variable entre ambas cartas con su valor
 
         public Interpreter(string input)
         {
             this.input = input;
+            FillCardsStatsDic();
             Tokenizing(); //creando tokens a partir de la entrada del usuario
             ParseGod(arbolGod.instructions, 0);
         }
-        public void ExecuteCode()
+        public void ExecuteCientCardEffect(Card ownCard, Card enemyCard)
         {
+            UpdateCardStatsDic(ownCard, enemyCard);
             arbolGod.Execute();
+            UpdateCardStats(ownCard, enemyCard);
         }
 
 
-        public void FillQuantumDictionary(Card ownCard, Card enemyCard)
+        public void FillCardsStatsDic()
         {
-            cardsStatsDic.Add("ownCard.Health", ownCard.Health);
-            cardsStatsDic.Add("ownCard.MaxHealth", ownCard.MaxHealthValue);
-            cardsStatsDic.Add("ownCard.AttackValue", ownCard.AttackValue);
-            cardsStatsDic.Add("ownCard.MaxAttackValue", ownCard.MaxAttackValue);
+            cardsStatsDic.Add("ownCard.Health", 0);
+            cardsStatsDic.Add("ownCard.MaxHealth", 0);
+            cardsStatsDic.Add("ownCard.AttackValue", 0);
+            cardsStatsDic.Add("ownCard.MaxAttackValue", 0);
 
-            cardsStatsDic.Add("enemyCard.Health", enemyCard.Health);
-            cardsStatsDic.Add("ownCard.MaxHealth", enemyCard.MaxHealthValue);
-            cardsStatsDic.Add("enemyCard.AttackValue", enemyCard.AttackValue);
-            cardsStatsDic.Add("enemyCard.MaxAttackValue", enemyCard.MaxAttackValue);
-        }
-
-        //esto es para modificar las estadisticas de las cartas 
-        public void UpdateCardStats(Card ownCard, Card enemyCard)
-        {
-            ownCard.Health = cardsStatsDic["ownCard.Health"];
-            ownCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
-            ownCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
-            ownCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
-
-            enemyCard.Health = cardsStatsDic["ownCard.Health"];
-            enemyCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
-            enemyCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
-            enemyCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
+            cardsStatsDic.Add("enemyCard.Health", 0);
+            cardsStatsDic.Add("enemyCard.MaxHealth", 0);
+            cardsStatsDic.Add("enemyCard.AttackValue", 0);
+            cardsStatsDic.Add("enemyCard.MaxAttackValue", 0);
         }
 
 
@@ -68,6 +57,21 @@ namespace MiniCompiler
             cardsStatsDic["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
             cardsStatsDic["ownCard.AttackValue"] = enemyCard.AttackValue;
             cardsStatsDic["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
+        }
+
+
+        //esto es para modificar las estadisticas de las cartas 
+        public void UpdateCardStats(Card ownCard, Card enemyCard)
+        {
+            ownCard.Health = cardsStatsDic["ownCard.Health"];
+            ownCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
+            ownCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
+            ownCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
+
+            enemyCard.Health = cardsStatsDic["ownCard.Health"];
+            enemyCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
+            enemyCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
+            enemyCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
         }
 
 
@@ -126,8 +130,21 @@ namespace MiniCompiler
         {
             for (int position = InitialPosition; position < tokens.Count; position++)
             {
-                if (tokens[position].type == TokenType.IDENTIFIER)
+                if (tokens[position].type == TokenType.NAME)
+                    newInitialCardName = tokens[position].value;
+
+                else if (tokens[position].type == TokenType.HEALTH)
+                    newInitialCardHealth = int.Parse(tokens[position].value);
+
+                else if (tokens[position].type == TokenType.ATK)
+                    newInitialCardATK = int.Parse(tokens[position].value);
+
+                else if (tokens[position].type == TokenType.SPECIE)
+                    newInitialCardSpecie = tokens[position].specie;
+
+                else if (tokens[position].type == TokenType.IDENTIFIER)
                     instructionsList.Add(new Assignment(tokens[position], ParseExpr(position)));
+
                 else if (tokens[position].type == TokenType.IF)
                 {
                     List<Iinstruction> newIfInstructionList = new List<Iinstruction>();

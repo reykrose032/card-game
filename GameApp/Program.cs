@@ -10,9 +10,9 @@ class Program
         var deck1 = GenerateDeck(4);
         var deck2 = GenerateDeck(4);
         //testing the compiler by adding a new card to the deck1
-        string userCodeInput = "Name: Franco Hernandez ; ATK: 10 ; Health: 20 ; Specie: Angel ; EffectAction: card.Health = card.MaxHealth ;";
+        string userCodeInput = "Name: Franco Hernandez ; ATK: 10 ; Health: 20 ; Specie: Angel ; ownCard.Health = enemyCard.MaxHealth ;";
         Interpreter interpreter = new Interpreter(userCodeInput);//agregar TokenType.NONE para no tener angel por default
-
+        interpreter.ExecuteCientCardEffect(deck1.Peek(), deck2.Peek());
         var player1 = new Player("Kevin", deck1);
         var player2 = new Player("AI", deck2);
 
