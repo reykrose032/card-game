@@ -30,9 +30,10 @@ public class Player
 
     public void Draw()
     {
-        if (Deck.Count > 0)
-        {
-            Hand.Add(Deck.Dequeue());
-        }
+        if (Deck.Count > 0) Hand.Add(Deck.Dequeue());
     }
+    public void IncreaseEnergy() => Energy++;
+
+    public void DecreaseEnergy() => Energy--;
+
 }

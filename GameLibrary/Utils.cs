@@ -30,9 +30,17 @@ namespace Utils
         {
             foreach (var card in list)//posible abstraccion
             {
-                Console.Write($"{list.IndexOf(card)} - {card.Name}, ");
+                Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.Health} // ATK: {card.AttackValue} ");
             }
         }
+        public static void ShowPlayerCards(List<Card> list)
+        {
+            foreach (var card in list)//posible abstraccion
+            {
+                Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.Health} // ATK: {card.AttackValue} ");
+            }
+        }
+
 
     }
 }

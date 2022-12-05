@@ -3,6 +3,7 @@ using GameLibrary.Objects;
 
 namespace MiniCompiler
 {
+    public delegate void Actions();
 
     public class Interpreter //modificar la implementacion grafica de effectos para utilizar y probar el funcionamiento de Effect // introducir condicionales
     {
@@ -15,23 +16,47 @@ namespace MiniCompiler
         List<Token> tokens = new List<Token>();
         GodTree arbolGod = new GodTree();
         public static Dictionary<string, int> cardsStatsDic = new Dictionary<string, int>(); //relaciona cada nombre de variable entre ambas cartas con su valor
+        public static Dictionary<string, Actions> gameActions = new Dictionary<string, Actions>();
 
         public Interpreter(string input)
         {
             this.input = input;
-            FillCardsStatsDic();
+            FillGameStatsDic();
             Tokenizing(); //creando tokens a partir de la entrada del usuario
+
             ParseGod(arbolGod.instructions, 0);
         }
-        public void ExecuteCientCardEffect(Card ownCard, Card enemyCard)
+        public void ExecuteCientCardEffect(Card ownCard, Card enemyCard, Game gameState)
         {
-            UpdateCardStatsDic(ownCard, enemyCard);
+            if (gameActions.Count != 0)
+                FillGameActionsDic(ownCard, enemyCard);
+            UpdateGameActionsDic(ownCard, enemyCard);
+            UpdateGameStatsDic(ownCard, enemyCard, gameState);
             arbolGod.Execute();
             UpdateCardStats(ownCard, enemyCard);
         }
 
+        public void FillGameActionsDic(Card ownCard, Card enemyCard)
+        {
+            gameActions.Add("Draw()", ownCard.player.Draw);
+            gameActions.Add("IncreaseEnergy()", ownCard.player.IncreaseEnergy);
+            gameActions.Add("DecreaseEnergy()", ownCard.player.DecreaseEnergy);
+            gameActions.Add("enemyDraw()", enemyCard.player.Draw);
+            gameActions.Add("enemyIncreaseEnergy()", enemyCard.player.IncreaseEnergy);
+            gameActions.Add("enemyDecreaseEnergy()", enemyCard.player.DecreaseEnergy);
+        }
 
-        public void FillCardsStatsDic()
+        public void UpdateGameActionsDic(Card ownCard, Card enemyCard)
+        {
+            gameActions["Draw()"] = ownCard.player.Draw;
+            gameActions["IncreaseEnergy()"] = ownCard.player.IncreaseEnergy;
+            gameActions["DecreaseEnergy()"] = ownCard.player.DecreaseEnergy;
+            gameActions["enemyDraw()"] = enemyCard.player.Draw;
+            gameActions["enemyIncreaseEnergy()"] = enemyCard.player.IncreaseEnergy;
+            gameActions["enemyDecreaseEnergy()"] = enemyCard.player.DecreaseEnergy;
+        }
+
+        public void FillGameStatsDic()
         {
             cardsStatsDic.Add("ownCard.Health", 0);
             cardsStatsDic.Add("ownCard.MaxHealth", 0);
@@ -42,11 +67,16 @@ namespace MiniCompiler
             cardsStatsDic.Add("enemyCard.MaxHealth", 0);
             cardsStatsDic.Add("enemyCard.AttackValue", 0);
             cardsStatsDic.Add("enemyCard.MaxAttackValue", 0);
+
+            cardsStatsDic.Add("NOCInPlayerHand", 0);
+            cardsStatsDic.Add("NOCInEnemyPlayerHand", 0);
+            cardsStatsDic.Add("NOCInPlayerField", 0);
+            cardsStatsDic.Add("NOCInEnemyPlayerField", 0);
+
         }
 
 
-        //esto es para modificar las estadisticas del diccionario quantumVariables
-        public void UpdateCardStatsDic(Card ownCard, Card enemyCard)
+        public void UpdateGameStatsDic(Card ownCard, Card enemyCard, Game gameState)
         {
             cardsStatsDic["ownCard.Health"] = ownCard.Health;
             cardsStatsDic["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
@@ -57,9 +87,25 @@ namespace MiniCompiler
             cardsStatsDic["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
             cardsStatsDic["ownCard.AttackValue"] = enemyCard.AttackValue;
             cardsStatsDic["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
+
+            cardsStatsDic["NOCInPlayerHand"] = ownCard.player.Hand.Count;
+            cardsStatsDic["NOCInEnemyPlayerHand"] = enemyCard.player.Hand.Count;
+            cardsStatsDic["NOCInPlayerField"] = GetNOCInPlayerField(gameState, ownCard.player);
+            cardsStatsDic["NOCInEnemyPlayerField"] = GetNOCInPlayerField(gameState, enemyCard.player);
+
+            cardsStatsDic["PlayerEnergy"] = ownCard.player.Energy;
+            cardsStatsDic["EnemyPlayerEnergy"] = enemyCard.player.Energy;
+
+            cardsStatsDic["NOCInPlayerDeck"] = ownCard.player.Deck.Count;
+            cardsStatsDic["NOCInEnemyPlayerDeck"] = enemyCard.player.Deck.Count;
+
         }
 
 
+        int GetNOCInPlayerField(Game gameState, Player player)
+        {
+            return gameState.Board[player].Count;
+        }
         //esto es para modificar las estadisticas de las cartas 
         public void UpdateCardStats(Card ownCard, Card enemyCard)
         {
@@ -123,6 +169,8 @@ namespace MiniCompiler
                     tokens.Add(new Token(TokenType.NUMBER, splitedInput[position]));
                 else if (splitedInput[position].Contains("Card"))
                     tokens.Add(new Token(TokenType.IDENTIFIER, splitedInput[position]));
+                else if (splitedInput[position].Contains("()"))
+                    tokens.Add(new Token(TokenType.ACTION, splitedInput[position]));
             }
         }
 
@@ -151,6 +199,9 @@ namespace MiniCompiler
                     ParseGod(newIfInstructionList, position);
                     instructionsList.Add(new IF(ParseExpr(position), newIfInstructionList));
                 }
+                else if (tokens[position].type == TokenType.ACTION)
+                    instructionsList.Add(new Action(tokens[position]));
+
                 else if (tokens[position].type == TokenType.END)
                     break;
             }
@@ -163,7 +214,8 @@ namespace MiniCompiler
             {
                 if (tokens[position].type == TokenType.END)
                 {
-                    tokens.RemoveAt(position); //lo remuevo ya q ParseGod se detiene cuando encuentra un token tipo END
+                    tokens.RemoveAt(position); //lo remuevo ya q ParseGod se detiene 
+                    //cuando encuentra un token tipo END,y para evitar q itere por esto de nuevo
                     break;
                 }
                 if (tokens[position].type == TokenType.NUMBER)

@@ -1,4 +1,7 @@
 using MiniCompiler;
+
+
+
 interface IExpr
 {
     public int Evaluate();
@@ -186,11 +189,15 @@ class Assignment : Iinstruction
 
 class Action : Iinstruction //incomplete
 {
-    Token action;
+    Token stringAction;
 
+    public Action(Token stringAction)
+    {
+        this.stringAction = stringAction;
+    }
     public void Execute()
     {
-        //cardActionsDic[action.value];
+        Interpreter.gameActions[stringAction.value]();
     }
 }
 class GodTree : Iinstruction

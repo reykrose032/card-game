@@ -11,14 +11,17 @@ public class Card
     public int MaxHealthValue { get; set; }
 
     public Species Specie { get; set; }
+
+    public Player player;
     Random random = new Random();
 
-    public Card(string name, int attackValue, int health, Species specie)
+    public Card(string name, int attackValue, int health, Species specie, Player player)
     {
         Name = name;
         AttackValue = attackValue;
         Health = health;
         Specie = specie;
+        this.player = player;
     }
     public Card(string name, Species species)
     {

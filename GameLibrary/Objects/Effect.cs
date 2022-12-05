@@ -14,32 +14,20 @@ public abstract class Effect
         this.enemyCard = enemyCard;
     }
 }
-public class ClientEffect : Effect, IEffect
-{
-    Interpreter Interpreter;
-    public ClientEffect(Card ownCard, Card enemyCard, Interpreter interpreter) : base(ownCard, enemyCard)
-    {
-        this.Interpreter = interpreter;
-    }
 
-    public void ActivateEffect()
-    {
-
-    }
-}
-public class Weaken : Effect, IEffect
+public class Weaken : Effect, IEffect//baja el damage del oponente a la mitad
 {
     public Weaken(Card ownCard, Card enemyCard) : base(ownCard, enemyCard) { }
     public void ActivateEffect()
     {
-        enemyCard.AttackValue = enemyCard.AttackValue * 20 / 100;
+        enemyCard.AttackValue = enemyCard.AttackValue / 2;
     }
 }
-public class Heal : Effect, IEffect
+public class Heal : Effect, IEffect//cura un 20% de la vida max
 {
     public Heal(Card ownCard, Card enemyCard) : base(ownCard, enemyCard) { }
     public void ActivateEffect()
     {
-        ownCard.Health = ownCard.Health + ownCard.Health * 3 / 100;
+        ownCard.Health += ownCard.MaxAttackValue * 20 / 100;
     }
 }
