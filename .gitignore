@@ -1,7 +1,5 @@
-GameLibrary/obj
-GameLibrary/bin
-GameApp/obj
-GameApp/bin
+*/obj
+*/bin
 
 .vscode
 
