@@ -32,6 +32,7 @@ public class Player
     {
         if (Deck.Count > 0) Hand.Add(Deck.Dequeue());
     }
+
     public void IncreaseEnergy() => Energy++;
 
     public void DecreaseEnergy() => Energy--;
