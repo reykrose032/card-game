@@ -21,7 +21,6 @@ namespace GameRules
         public static bool CanAttack(Player currentPlayer, Player enemyPlayer, Game game) => game.Board[currentPlayer].Count != 0 && game.Board[enemyPlayer].Count != 0;
         public static void InvokeCard(Player currentPlayer, Dictionary<Player, List<Card>> board, int userInput)
         {
-            if (!Input.IsValidInput(userInput, currentPlayer.Hand.Count)) return;
             var cardToInvoke = currentPlayer.Hand.ElementAt(userInput);
             currentPlayer.Invoke(cardToInvoke, board);
         }

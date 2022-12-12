@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Franco\\Proyect 2nd Semestre\\card-game\\GameLibrary\\GameLibrary.csproj": {}
+    "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj": {}
   },
   "projects": {
-    "C:\\Franco\\Proyect 2nd Semestre\\card-game\\GameLibrary\\GameLibrary.csproj": {
+    "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Franco\\Proyect 2nd Semestre\\card-game\\GameLibrary\\GameLibrary.csproj",
+        "projectUniqueName": "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj",
         "projectName": "GameLibrary",
-        "projectPath": "C:\\Franco\\Proyect 2nd Semestre\\card-game\\GameLibrary\\GameLibrary.csproj",
+        "projectPath": "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj",
         "packagesPath": "C:\\Users\\Franco\\.nuget\\packages\\",
-        "outputPath": "C:\\Franco\\Proyect 2nd Semestre\\card-game\\GameLibrary\\obj\\",
+        "outputPath": "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Franco\\AppData\\Roaming\\NuGet\\NuGet.Config"

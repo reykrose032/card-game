@@ -13,7 +13,7 @@ public static class Input
         else
             return true;
     }
-    public static bool IsValidInput(int cardIndex, int validRange)
+    public static bool IsInRangeInput(int cardIndex, int validRange)
     {
         if (cardIndex >= validRange)
         {
@@ -51,8 +51,14 @@ public static class Print
     {
         Console.WriteLine("Field:");
         Console.WriteLine();
-        Print.ShowPlayerCards(game.Board[currentPlayer]);
+        Console.WriteLine($"{enemyPlayer.Name}'s Cards:");
+        Console.WriteLine();
         Print.ShowPlayerCards(game.Board[enemyPlayer]);
+        Console.WriteLine("--------------------------");
+        Print.ShowPlayerCards(game.Board[currentPlayer]);
+        Console.WriteLine();
+        Console.WriteLine($"{currentPlayer.Name}'s Cards:");
+        Console.WriteLine();
     }
     public static void Hand(Player currentPlayer)
     {

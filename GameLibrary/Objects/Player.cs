@@ -9,6 +9,12 @@ public class Player
     public Queue<Card> Deck;
     public List<Card> Hand;
 
+    public Player(Queue<Card> deck)
+    {
+        Energy = InitialEnergy;
+        Deck = deck;
+        Hand = new();
+    }
     public Player(string name, Queue<Card> deck)
     {
         Name = name;
