@@ -1,21 +1,19 @@
 namespace GameLibrary.Objects;
 
-public class PlayerIA : Player
+public static class AI
 {
-    public PlayerIA(Queue<Card> deck) : base("IA", deck) { }
-
-    public int GetCardToInvoke(Player currentPlayer, Player enemyPlayer, Game game)
+    public static int GetCardToInvoke(Player currentPlayer, Player enemyPlayer, Game game)
     {
         int cardWithMaxAtk = SelectingCardWithLargestATK(currentPlayer, enemyPlayer, game);
         int cardWithLargestHealth = SelectingCardWithLargestHealth(currentPlayer, enemyPlayer, game);
         return (cardWithMaxAtk + cardWithLargestHealth) % 2 == 0 ? cardWithMaxAtk : cardWithLargestHealth;
     }
 
-    public int GetAttackingCard(Player currentPlayer, Player enemyPlayer, Game game) => SelectingCardWithLargestATK(currentPlayer, enemyPlayer, game);
+    public static int GetAttackingCard(Player currentPlayer, Player enemyPlayer, Game game) => SelectingCardWithLargestATK(currentPlayer, enemyPlayer, game);
 
-    public int GetCardToAttack(Player currentPlayer, Player enemyPlayer, Game game) => SelectingCardWithMinorHealth(currentPlayer, enemyPlayer, game);
+    public static int GetCardToAttack(Player currentPlayer, Player enemyPlayer, Game game) => SelectingCardWithMinorHealth(currentPlayer, enemyPlayer, game);
 
-    public int SelectingCardWithLargestATK(Player currentPlayer, Player enemyPlayer, Game game)
+    public static int SelectingCardWithLargestATK(Player currentPlayer, Player enemyPlayer, Game game)
     {
         int result = 0;
         int largestAtk = 0;
@@ -30,7 +28,7 @@ public class PlayerIA : Player
         return result;
     }
 
-    public int SelectingCardWithMinorHealth(Player currentPlayer, Player enemyPlayer, Game game)
+    public static int SelectingCardWithMinorHealth(Player currentPlayer, Player enemyPlayer, Game game)
     {
         int result = 0;
         int minorHealth = 0;
@@ -44,7 +42,7 @@ public class PlayerIA : Player
         }
         return result;
     }
-    public int SelectingCardWithLargestHealth(Player currentPlayer, Player enemyPlayer, Game game)
+    public static int SelectingCardWithLargestHealth(Player currentPlayer, Player enemyPlayer, Game game)
     {
         int result = 0;
         int largestHealth = 0;
@@ -59,5 +57,3 @@ public class PlayerIA : Player
         return result;
     }
 }
-
-

@@ -8,19 +8,14 @@ public class Player
     public int Energy;
     public Queue<Card> Deck;
     public List<Card> Hand;
-
-    public Player(Queue<Card> deck)
-    {
-        Energy = InitialEnergy;
-        Deck = deck;
-        Hand = new();
-    }
-    public Player(string name, Queue<Card> deck)
+    public bool IsAI;
+    public Player(string name, Queue<Card> deck, bool IsAI)
     {
         Name = name;
         Energy = InitialEnergy;
         Deck = deck;
         Hand = new();
+        this.IsAI = IsAI;
     }
 
     public void Invoke(Card card, Dictionary<Player, List<Card>> board)
