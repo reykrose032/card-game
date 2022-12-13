@@ -1,11 +1,23 @@
 ﻿using GameLibrary;
 using GameLibrary.Objects;
 using Utils;
+using GameInterpreter;
+using Spectre.Console;
 
 class Program
 {
     static void Main(string[] args)
     {
+        // System.Console.Write("> ");
+        // var input = Console.ReadLine();
+        // var input = "123 + 543";
+        // if (!string.IsNullOrEmpty(input))
+        // {
+        //     var interpreter = new Interpreter(input);
+        //     var result = interpreter.Expression();
+        //     System.Console.WriteLine(result);
+        // }
+
         var deck1 = GenerateDeck(8);
         var deck2 = GenerateDeck(8);
 
@@ -19,6 +31,10 @@ class Program
 
     static void Play(Game game)
     {
+        Console.Clear();
+        // AnsiConsole.Markup("[bold red]Battle Begins!!![/] \n");
+        AnsiConsole.Write(new FigletText("Battle Begins!!!").Centered().Color(Color.Red));
+
         while (!game.IsEndOfGame())
         {
             bool endTurn = false;
@@ -26,22 +42,21 @@ class Program
             var currentPlayer = game.IsTurnOf();
             var currentOpponent = game.IsNotTurnOf();
 
-            Console.WriteLine($"Is {currentPlayer.Name}'s turn:");
-
             while (!endTurn)
             {
+                Console.WriteLine($"Is {currentPlayer.Name}'s turn:");
                 Print.Board(game.Board);
-                Console.WriteLine("Choose an action:");
-                Console.WriteLine("I: Invoke Card, A: Attack, <Enter>: End Turn");
+                AnsiConsole.Markup($"Choose an action [yellow](Energy: {currentPlayer.Energy})[/]:\n");
+                AnsiConsole.Markup("[green]I: Invoke Card[/], [red]A: Attack[/], <Enter>: End Turn");
 
-                var action = Console.ReadKey();
+                var action = Console.ReadKey(true);
                 System.Console.WriteLine();
                 switch (action.Key)
                 {
                     case ConsoleKey.I:
                         if (currentPlayer.Hand.Count == 0)
                         {
-                            System.Console.WriteLine("You don't have any cards in your hand. Choose another action.");
+                            Print.PromptUserError("You don't have any cards in your hand");
                             break;
                         }
                         InvokeCard(currentPlayer, game.Board);
@@ -50,17 +65,17 @@ class Program
                     case ConsoleKey.A:
                         if (currentPlayer.Energy == 0)
                         {
-                            System.Console.WriteLine("You don't have energy to attack. Choose another action.");
+                            Print.PromptUserError("You don't have energy to attack :(");
                             break;
                         }
                         if (game.Board[currentPlayer].Count == 0)
                         {
-                            System.Console.WriteLine("You don't have cards in the board.");
+                            Print.PromptUserError("You don't have cards in the board");
                             break;
                         }
                         if (game.Board[currentOpponent].Count == 0)
                         {
-                            System.Console.WriteLine("No Opponent card to attack.");
+                            Print.PromptUserError("There's no opponent card to attack");
                             break;
                         }
                         AttackCard(currentPlayer, currentOpponent, game.Board);
@@ -75,6 +90,8 @@ class Program
                         System.Console.WriteLine("Wrong Key!");
                         break;
                 }
+
+                Console.Clear();
             }
 
             game.EndTurn();
@@ -112,16 +129,24 @@ class Program
     {
         Print.PlayerCards(cards);
 
-        var userInput = Console.ReadKey();
-        System.Console.WriteLine();
-        if (!InputValidation.IsDigit(userInput))  
-            return null;
+        var names = new List<string>();
+        names.Add("...");
+        foreach (var card in cards)
+        {
+            names.Add(card.Name);
+        }
 
-        var cardIndex = int.Parse(userInput.KeyChar.ToString());
-        if (!InputValidation.IsIndexOutOfBounds(cardIndex, cards.Count)) 
-            return null;
+        var pageSize = cards.Count >= 2? cards.Count + 1 : 3;
 
-        return cards.ElementAt(cardIndex);
+        var choice = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                            .PageSize(pageSize)
+                            .AddChoices(names));
+        
+        // BUG: If two or more cards have the same Name and any other than the first one is choosen,
+        // the first one will always be choosen.
+        var choosenCard = cards.Find((card) => card.Name == choice);
+        
+        return choosenCard;
     }
 
     static void InvokeCard(Player currentPlayer, Dictionary<Player, List<Card>> board)
@@ -147,5 +172,6 @@ class Program
             return;
 
         attackingCard.Attack(cardToAttack);
+        currentPlayer.Energy--;
     }
 }
