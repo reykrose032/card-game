@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "GameLibrary/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/GameLibrary.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/GameLibrary.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "GameLibrary/1.0.0": {
+      "type": "project",
+      "path": "../GameLibrary/GameLibrary.csproj",
+      "msbuildProject": "../GameLibrary/GameLibrary.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "GameLibrary >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Franco\\.nuget\\packages\\": {}
@@ -13,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj",
-      "projectName": "GameLibrary",
-      "projectPath": "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj",
+      "projectUniqueName": "c:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\Interpreter\\Interpreter.csproj",
+      "projectName": "Interpreter",
+      "projectPath": "c:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\Interpreter\\Interpreter.csproj",
       "packagesPath": "C:\\Users\\Franco\\.nuget\\packages\\",
-      "outputPath": "C:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\obj\\",
+      "outputPath": "c:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\Interpreter\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Franco\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -31,7 +50,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "c:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj": {
+              "projectPath": "c:\\Franco\\franco\\Proyects\\reykrose032\\card-game\\GameLibrary\\GameLibrary.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
