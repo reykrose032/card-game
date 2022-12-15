@@ -1,33 +1,41 @@
 using GameLibrary.Objects;
 using MiniCompiler;
-interface IEffect
+
+public interface IEffect
 {
-    void ActivateEffect();
-}
-public abstract class Effect
-{
-    public Card ownCard;
-    public Card enemyCard;
-    public Effect(Card ownCard, Card enemyCard)
-    {
-        this.ownCard = ownCard;
-        this.enemyCard = enemyCard;
-    }
+    void ActivateEffect(Card ownCard, Card enemyCard, Game game);
 }
 
-public class Weaken : Effect, IEffect//baja el damage del oponente a la mitad
+public class Weaken : IEffect//baja el damage del oponente a la mitad
 {
-    public Weaken(Card ownCard, Card enemyCard) : base(ownCard, enemyCard) { }
-    public void ActivateEffect()
+    public void ActivateEffect(Card ownCard, Card enemyCard, Game game)
     {
         enemyCard.AttackValue = enemyCard.AttackValue / 2;
     }
 }
-public class Heal : Effect, IEffect//cura un 20% de la vida max
+public class Heal : IEffect//cura un 20% de la vida max
 {
-    public Heal(Card ownCard, Card enemyCard) : base(ownCard, enemyCard) { }
-    public void ActivateEffect()
+    public void ActivateEffect(Card ownCard, Card enemyCard, Game game)
     {
-        ownCard.Health += ownCard.MaxAttackValue * 20 / 100;
+        ownCard.HealthValue += ownCard.MaxAttackValue * 20 / 100;
+    }
+}
+
+
+public class ClientEffect : IEffect
+{
+    Iinstruction instructions;
+    public ClientEffect(Iinstruction instructions) => this.instructions = instructions;
+
+    public void ActivateEffect(Card ownCard, Card enemyCard, Game game)
+    {
+        if (GameData.gameActions.Count != 0)
+            GameData.PreparingGameActionsDic();
+        if (GameData.cardsStatsDic.Count != 0)
+            GameData.FillGameStatsDic();
+        GameData.PreparingGameActionsDic(ownCard, enemyCard);
+        GameData.UpdateGameStatsDic(ownCard, enemyCard, game);
+        instructions.Execute();
+        GameData.UpdateCardStats(ownCard, enemyCard);
     }
 }

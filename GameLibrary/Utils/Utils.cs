@@ -30,14 +30,14 @@ public static class Print
     {
         foreach (var card in list)//posible abstraccion
         {
-            Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.Health} // ATK: {card.AttackValue} ");
+            Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.HealthValue} // ATK: {card.AttackValue} ");
         }
     }
     public static void ShowPlayerCards(List<Card> list)
     {
         foreach (var card in list)//posible abstraccion
         {
-            Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.Health} // ATK: {card.AttackValue} ");
+            Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.HealthValue} // ATK: {card.AttackValue} ");
         }
     }
     public static void PrintPossibleUserActions(List<string> actions)

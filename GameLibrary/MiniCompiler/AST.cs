@@ -1,7 +1,4 @@
-using MiniCompiler;
-
-
-
+namespace MiniCompiler;
 interface IExpr
 {
     public int Evaluate();
@@ -75,7 +72,7 @@ class Identifier : IExpr
     string key;
     public Identifier(string key) => this.key = key;
 
-    public int Evaluate() => Interpreter.cardsStatsDic[key];
+    public int Evaluate() => GameData.cardsStatsDic[key];
 }
 
 class Higher : BinaryExpr
@@ -144,7 +141,7 @@ class OR : BinaryExpr
 }
 
 
-interface Iinstruction
+public interface Iinstruction
 {
     void Execute();
 }
@@ -183,11 +180,11 @@ class Assignment : Iinstruction
     }
     public void Execute()
     {
-        Interpreter.cardsStatsDic[leftIdentifier.value] = rightExpr.Evaluate();
+        GameData.cardsStatsDic[leftIdentifier.value] = rightExpr.Evaluate();
     }
 }
 
-class Action : Iinstruction //incomplete
+class Action : Iinstruction
 {
     Token stringAction;
 
@@ -197,10 +194,10 @@ class Action : Iinstruction //incomplete
     }
     public void Execute()
     {
-        Interpreter.gameActions[stringAction.value]();
+        GameData.gameActions[stringAction.value]();
     }
 }
-class GodTree : Iinstruction
+class ClientEffectInstructions : Iinstruction
 {
     public List<Iinstruction> instructions = new List<Iinstruction>();
 

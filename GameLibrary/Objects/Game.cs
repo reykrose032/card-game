@@ -26,7 +26,7 @@ public class Game
         {
             foreach (var card in playerBoard.ToList())
             {
-                if (card.Health <= 0)
+                if (card.HealthValue <= 0)
                 {
                     playerBoard.Remove(card);
                 }

@@ -7,34 +7,36 @@ public class Card
     public string Name { get; set; }
     public int AttackValue { get; set; }
     public int MaxAttackValue { get; set; }
-    public int Health { get; set; }
+    public int HealthValue { get; set; }
     public int MaxHealthValue { get; set; }
 
     public Species Specie { get; set; }
 
-    public Player player;
+    public Player owner;
     Random random = new Random();
 
-    public Card(string name, int attackValue, int health, Species specie, Player player)
+    public Card(string name, int attackValue, int health, Species specie, Player owner)
     {
         Name = name;
         AttackValue = attackValue;
-        Health = health;
+        MaxAttackValue = attackValue;
+        HealthValue = health;
+        MaxHealthValue = HealthValue;
         Specie = specie;
-        this.player = player;
+        this.owner = owner;
     }
     public Card(string name, Species species)
     {
         Name = name;
         Specie = species;
         AttackValue = ComputeAttack();
-        Health = ComputeHealth();
+        HealthValue = ComputeHealth();
     }
 
 
     public void Attack(Card card)
     {
-        card.Health -= AttackValue;
+        card.HealthValue -= AttackValue;
     }
 
     int ComputeAttack() => random.Next(MinAttack, MaxAttack);

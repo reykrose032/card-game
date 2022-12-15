@@ -12,11 +12,20 @@ class Program
         var deck1 = Start.GenerateDeck(4);
         var deck2 = Start.GenerateDeck(4);
         //testing the compiler by adding a new card to the deck1
-        string userCodeInput = "Name: Franco Hernandez ; ATK: 10 ; Health: 20 ; Specie: Angel ; ownCard.Health = enemyCard.MaxHealth ;";
-        Interpreter interpreter = new Interpreter(userCodeInput);//agregar TokenType.NONE para no tener angel por default
+        string userCodeInput = "Name: Franco Hernandez ; InitialATK: 10 ; InitialHealth: 20 ; InitialSpecie: Angel ; ownCard.Health = enemyCard.MaxHealth ;";
 
+        Interpreter interpreter = new Interpreter();//agregar TokenType.NONE para no tener angel por default
+        interpreter.input = "asnjdbasjs";
+        interpreter.input = userCodeInput;
         Player player1 = new ConsolePlayer(new Player("Franco", deck1, false));
         Player player2 = new ConsolePlayer(new Player("Magela", deck2, false));
+
+        //ve entendiendo la implementacion,abstraete de como funciona,por ahora,poco a poco voy haciendolo mas legible
+        interpreter.EatCode(userCodeInput);//cada nuevo codigo es introducido en este metodo
+        deck1.Enqueue(interpreter.buildCard(player1));//este metodo crea una nueva carta segun el codigo metido en el metodo anterior
+        IEffect clientEffect = interpreter.buildEffect();//este metodo crea un nuevo efecto segun el codigo metido dos lineas mas arriba
+        //cada vez q quieras crear una nueva carta o efecto,hay q usar el metodo EatCode q interpreta el codigo para poder crear cartas y efectos en base a el ultimo codigo "comido
+
 
         bool wantIA = false;//preguntar si quiere jugar vs IA
 

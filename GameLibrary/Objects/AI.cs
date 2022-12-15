@@ -34,9 +34,9 @@ public static class AI
         int minorHealth = 0;
         for (int cardNumber = 0; cardNumber < game.Board[enemyPlayer].Count; cardNumber++)
         {
-            if (game.Board[enemyPlayer][cardNumber].Health < minorHealth)
+            if (game.Board[enemyPlayer][cardNumber].HealthValue < minorHealth)
             {
-                minorHealth = game.Board[enemyPlayer][cardNumber].Health;
+                minorHealth = game.Board[enemyPlayer][cardNumber].HealthValue;
                 result = cardNumber;
             }
         }
@@ -48,9 +48,9 @@ public static class AI
         int largestHealth = 0;
         for (int cardNumber = 0; cardNumber < game.Board[currentPlayer].Count; cardNumber++)
         {
-            if (game.Board[currentPlayer][cardNumber].Health > largestHealth)
+            if (game.Board[currentPlayer][cardNumber].HealthValue > largestHealth)
             {
-                largestHealth = game.Board[currentPlayer][cardNumber].Health;
+                largestHealth = game.Board[currentPlayer][cardNumber].HealthValue;
                 result = cardNumber;
             }
         }
