@@ -18,11 +18,11 @@ class Program
         //     System.Console.WriteLine(result);
         // }
 
-        var deck1 = GenerateDeck(8);
-        var deck2 = GenerateDeck(8);
+        var deck1 = GenerateDeck(3);
+        var deck2 = GenerateDeck(3);
 
         var player1 = new Player("Kevin", deck1);
-        var player2 = new Player("AI", deck2);
+        var player2 = new Player("Franco", deck2);
 
         var game = new Game(player1, player2);
 
@@ -106,28 +106,32 @@ class Program
         }
     }
 
-    static Card GenerateCard()
+    static Card GenerateCard(string name)
     {
         var species = Enum.GetValues(typeof(Species));
         var random = new Random();
         var cardSpecies = (Species)species.GetValue(random.Next(species.Length));
-        var card = new Card(cardSpecies.ToString(), cardSpecies);
+        var card = new Card(name, cardSpecies);
         return card;
     }
 
     static Queue<Card> GenerateDeck(int n)
     {
+        var names = new string[]{"Peter", "Bullock", "Bender", "Bowser", "Lynch", "Flynn"}.ToList();
         var cards = new Queue<Card>();
         for (int i = 0; i < n; i++)
         {
-            cards.Enqueue(GenerateCard());
+            var randomIndex = new Random().Next(names.Count);
+            var randomName = names.ElementAt(randomIndex);
+            names.RemoveAt(randomIndex);
+            cards.Enqueue(GenerateCard(randomName));
         }
         return cards;
     }
 
     static Card PickCardFrom(List<Card> cards)
     {
-        Print.PlayerCards(cards);
+        Print.PlayerDeck(cards);
 
         var names = new List<string>();
         names.Add("...");
