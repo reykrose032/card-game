@@ -1,5 +1,4 @@
 using GameLibrary.Objects;
-using GameRules;
 using GameApp;
 
 public class ConsolePlayer : Player

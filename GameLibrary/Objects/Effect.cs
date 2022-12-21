@@ -29,10 +29,10 @@ public class ClientEffect : IEffect
 
     public void ActivateEffect(Card ownCard, Card enemyCard, Game game)
     {
-        if (GameData.gameActions.Count != 0)
-            GameData.PreparingGameActionsDic();
-        if (GameData.cardsStatsDic.Count != 0)
-            GameData.FillGameStatsDic();
+        if (GameData.gameActions.Count != 0) GameData.PreparingGameActionsDic();
+
+        if (GameData.cardsStatsDic.Count != 0) GameData.FillGameStatsDic();
+
         GameData.PreparingGameActionsDic(ownCard, enemyCard);
         GameData.UpdateGameStatsDic(ownCard, enemyCard, game);
         instructions.Execute();

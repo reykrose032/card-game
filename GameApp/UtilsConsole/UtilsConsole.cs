@@ -1,7 +1,7 @@
 using GameLibrary.Objects;
 namespace GameApp;
 
-public static class Input
+public static class UtilsForConsole
 {
     public static bool IsValidInput(ConsoleKeyInfo userInput)
     {
