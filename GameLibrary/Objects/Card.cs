@@ -9,13 +9,10 @@ public class Card
     public int MaxAttackValue { get; set; }
     public int HealthValue { get; set; }
     public int MaxHealthValue { get; set; }
-
     public Species Specie { get; set; }
+    public List<IEffect> Effects = new List<IEffect>();
 
-    public Player owner;
-    Random random = new Random();
-
-    public Card(string name, int attackValue, int health, Species specie, Player owner)
+    public Card(string name, int attackValue, int health, Species specie)
     {
         Name = name;
         AttackValue = attackValue;
@@ -23,23 +20,17 @@ public class Card
         HealthValue = health;
         MaxHealthValue = HealthValue;
         Specie = specie;
-        this.owner = owner;
     }
     public Card(string name, Species species)
     {
         Name = name;
         Specie = species;
-        AttackValue = ComputeAttack();
-        HealthValue = ComputeHealth();
+        AttackValue = RandomStuff.ComputeAttack();
+        HealthValue = RandomStuff.ComputeHealth();
+        MaxAttackValue = AttackValue;
+        MaxHealthValue = HealthValue;
     }
 
+    public void Attack(Card card) => card.HealthValue -= AttackValue;
 
-    public void Attack(Card card)
-    {
-        card.HealthValue -= AttackValue;
-    }
-
-    int ComputeAttack() => random.Next(MinAttack, MaxAttack);
-
-    int ComputeHealth() => random.Next(MinHealth, MaxHealth);
 }

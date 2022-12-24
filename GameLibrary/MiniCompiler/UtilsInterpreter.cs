@@ -4,20 +4,21 @@ namespace MiniCompiler;
 public static class UtilsForInterpreter
 {
     //dado un string,este devuelve la especie a la q se refiere
-    public static Species GetSpecieFromString(string input)
+    public static Species GetSpecieFromString(List<string> splitedUserInput, int position)
     {
-        if (input == Species.Angel.ToString())
-            return Species.Angel;
-        else if (input == Species.Basilisk.ToString())
-            return Species.Basilisk;
-        else if (input == Species.Cthulhu.ToString())
-            return Species.Cthulhu;
-        else if (input == Species.Dragon.ToString())
-            return Species.Dragon;
-        else if (input == Species.Siren.ToString())
-            return Species.Siren;
-        else if (input == Species.Worm.ToString())
-            return Species.Worm;
+        string subject = splitedUserInput[position];
+        if (subject == Species.Angel.ToString())
+        { splitedUserInput.RemoveAt(position); return Species.Angel; }
+        else if (subject == Species.Basilisk.ToString())
+        { splitedUserInput.RemoveAt(position); return Species.Basilisk; }
+        else if (subject == Species.Cthulhu.ToString())
+        { splitedUserInput.RemoveAt(position); return Species.Cthulhu; }
+        else if (subject == Species.Dragon.ToString())
+        { splitedUserInput.RemoveAt(position); return Species.Dragon; }
+        else if (subject == Species.Siren.ToString())
+        { splitedUserInput.RemoveAt(position); return Species.Siren; }
+        else if (subject == Species.Worm.ToString())
+        { splitedUserInput.RemoveAt(position); return Species.Worm; }
         throw new Exception();
     }
 
@@ -30,7 +31,7 @@ public static class UtilsForInterpreter
         {
             result += splitedUserInput[position];
             result += " ";
-            position++;
+            splitedUserInput.RemoveAt(position);
         }
         return result;
     }

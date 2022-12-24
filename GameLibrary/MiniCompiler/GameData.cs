@@ -4,175 +4,91 @@ namespace MiniCompiler;
 public static class GameData
 {
     public delegate void Actions();
-    public static Dictionary<string, int> cardsStatsDic = new Dictionary<string, int>(); //relaciona cada nombre de variable entre ambas cartas con su valor
-    public static Dictionary<string, Actions> gameActions = new Dictionary<string, Actions>();
+    public static Dictionary<string, int> CardStats = new Dictionary<string, int>(); //relaciona cada nombre de variable entre ambas cartas con su valor
+    public static Dictionary<string, Actions> GameActions = new Dictionary<string, Actions>();
 
     public static void PreparingGameActionsDic()
     {
         void Void() { }
-        gameActions.Add("Draw()", Void);
-        gameActions.Add("IncreaseEnergy()", Void);
-        gameActions.Add("DecreaseEnergy()", Void);
-        gameActions.Add("enemyDraw()", Void);
-        gameActions.Add("enemyIncreaseEnergy()", Void);
-        gameActions.Add("enemyDecreaseEnergy()", Void);
+        GameActions.Add("Draw()", Void);
+        GameActions.Add("IncreaseEnergy()", Void);
+        GameActions.Add("DecreaseEnergy()", Void);
+        GameActions.Add("enemyDraw()", Void);
+        GameActions.Add("enemyIncreaseEnergy()", Void);
+        GameActions.Add("enemyDecreaseEnergy()", Void);
     }
 
-    public static void PreparingGameActionsDic(Card ownCard, Card enemyCard)
+    public static void PreparingGameStatsDic()
     {
-        gameActions["Draw()"] = ownCard.owner.Draw;
-        gameActions["IncreaseEnergy()"] = ownCard.owner.IncreaseEnergy;
-        gameActions["DecreaseEnergy()"] = ownCard.owner.DecreaseEnergy;
-        gameActions["enemyDraw()"] = enemyCard.owner.Draw;
-        gameActions["enemyIncreaseEnergy()"] = enemyCard.owner.IncreaseEnergy;
-        gameActions["enemyDecreaseEnergy()"] = enemyCard.owner.DecreaseEnergy;
-    }
+        CardStats.Add("ownCard.Health", 0);
+        CardStats.Add("ownCard.MaxHealth", 0);
+        CardStats.Add("ownCard.AttackValue", 0);
+        CardStats.Add("ownCard.MaxAttackValue", 0);
 
-    public static void FillGameStatsDic()
-    {
-        cardsStatsDic.Add("ownCard.Health", 0);
-        cardsStatsDic.Add("ownCard.MaxHealth", 0);
-        cardsStatsDic.Add("ownCard.AttackValue", 0);
-        cardsStatsDic.Add("ownCard.MaxAttackValue", 0);
+        CardStats.Add("enemyCard.Health", 0);
+        CardStats.Add("enemyCard.MaxHealth", 0);
+        CardStats.Add("enemyCard.AttackValue", 0);
+        CardStats.Add("enemyCard.MaxAttackValue", 0);
 
-        cardsStatsDic.Add("enemyCard.Health", 0);
-        cardsStatsDic.Add("enemyCard.MaxHealth", 0);
-        cardsStatsDic.Add("enemyCard.AttackValue", 0);
-        cardsStatsDic.Add("enemyCard.MaxAttackValue", 0);
-
-        cardsStatsDic.Add("NOCInPlayerHand", 0);
-        cardsStatsDic.Add("NOCInEnemyPlayerHand", 0);
-        cardsStatsDic.Add("NOCInPlayerField", 0);
-        cardsStatsDic.Add("NOCInEnemyPlayerField", 0);
+        CardStats.Add("NOCInPlayerHand", 0);
+        CardStats.Add("NOCInEnemyPlayerHand", 0);
+        CardStats.Add("NOCInPlayerField", 0);
+        CardStats.Add("NOCInEnemyPlayerField", 0);
 
     }
 
-
-    public static void UpdateGameStatsDic(Card ownCard, Card enemyCard, Game gameState)
+    public static void UpdatingGameActionsDic(Card ownCard, Card enemyCard, Game gameState)
     {
-        cardsStatsDic["ownCard.Health"] = ownCard.HealthValue;
-        cardsStatsDic["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
-        cardsStatsDic["ownCard.AttackValue"] = ownCard.AttackValue;
-        cardsStatsDic["ownCard.MaxAttackValue"] = ownCard.MaxAttackValue;
-
-        cardsStatsDic["ownCard.Health"] = enemyCard.HealthValue;
-        cardsStatsDic["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
-        cardsStatsDic["ownCard.AttackValue"] = enemyCard.AttackValue;
-        cardsStatsDic["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
-
-        cardsStatsDic["NOCInPlayerHand"] = ownCard.owner.Hand.Count;
-        cardsStatsDic["NOCInEnemyPlayerHand"] = enemyCard.owner.Hand.Count;
-        cardsStatsDic["NOCInPlayerField"] = GetNOCInPlayerField(gameState, ownCard.owner);
-        cardsStatsDic["NOCInEnemyPlayerField"] = GetNOCInPlayerField(gameState, enemyCard.owner);
-
-        cardsStatsDic["PlayerEnergy"] = ownCard.owner.Energy;
-        cardsStatsDic["EnemyPlayerEnergy"] = enemyCard.owner.Energy;
-
-        cardsStatsDic["NOCInPlayerDeck"] = ownCard.owner.Deck.Count;
-        cardsStatsDic["NOCInEnemyPlayerDeck"] = enemyCard.owner.Deck.Count;
-
+        GameActions["Draw(Player1)"] = gameState.Player1.Draw;
+        GameActions["Draw(Player2)"] = gameState.Player2.Draw;
+        GameActions["IncreaseEnergy(Player1)"] = gameState.Player1.IncreaseEnergy;
+        GameActions["IncreaseEnergy(Player2)"] = gameState.Player2.IncreaseEnergy;
+        GameActions["DecreaseEnergy(Player1)"] = gameState.Player1.DecreaseEnergy;
+        GameActions["DecreaseEnergy(Player2)"] = gameState.Player2.DecreaseEnergy;
     }
 
-
-    static int GetNOCInPlayerField(Game gameState, Player player)
+    public static void UpdatingGameStatsDic(Card ownCard, Card enemyCard, Game gameState)
     {
-        return gameState.Board[player].Count;
+        CardStats["ownCard.Health"] = ownCard.HealthValue;
+        CardStats["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
+        CardStats["ownCard.AttackValue"] = ownCard.AttackValue;
+        CardStats["ownCard.MaxAttackValue"] = ownCard.MaxAttackValue;
+
+        CardStats["ownCard.Health"] = enemyCard.HealthValue;
+        CardStats["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
+        CardStats["ownCard.AttackValue"] = enemyCard.AttackValue;
+        CardStats["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
+
+        //note: NOC=number of cards
+        CardStats["NOCInHand(Player1)"] = gameState.Player1.Hand.Count;
+        CardStats["NOCInHand(Player2)"] = gameState.Player2.Hand.Count;
+        CardStats["NOCInField(Player1)"] = GetNOCInPlayerField(gameState, gameState.Player1);
+        CardStats["NOCInField(Player2)"] = GetNOCInPlayerField(gameState, gameState.Player2);
+        CardStats["NOCInDeck(Player1)"] = gameState.Player1.Deck.Count;
+        CardStats["NOCInDeck(Player2)"] = gameState.Player2.Deck.Count;
+
+        CardStats["GetEnergy(Player1)"] = gameState.Player1.Energy;
+        CardStats["GetEnergy(Player2)"] = gameState.Player2.Energy;
+        //note: Can (and will) be added so many more actions.
+
     }
     //esto es para modificar las estadisticas de las cartas 
     public static void UpdateCardStats(Card ownCard, Card enemyCard)
     {
-        ownCard.HealthValue = cardsStatsDic["ownCard.Health"];
-        ownCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
-        ownCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
-        ownCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
+        ownCard.HealthValue = CardStats["ownCard.Health"];
+        ownCard.MaxHealthValue = CardStats["ownCard.MaxHealthValue"];
+        ownCard.AttackValue = CardStats["ownCard.AttackValue"];
+        ownCard.MaxAttackValue = CardStats["ownCard.MaxAttackValue"];
 
-        enemyCard.HealthValue = cardsStatsDic["ownCard.Health"];
-        enemyCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
-        enemyCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
-        enemyCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
+        enemyCard.HealthValue = CardStats["ownCard.Health"];
+        enemyCard.MaxHealthValue = CardStats["ownCard.MaxHealthValue"];
+        enemyCard.AttackValue = CardStats["ownCard.AttackValue"];
+        enemyCard.MaxAttackValue = CardStats["ownCard.MaxAttackValue"];
     }
+
+    ///////////////////////// Auxiliar Methods ////////////////////////////
+
+    static int GetNOCInPlayerField(Game gameState, Player player) => gameState.Board[player].Count;
+
+
 }
-// public static void FillGameActionsDic(Card ownCard, Card enemyCard)
-// {
-//     gameActions.Add("Draw()", ownCard.owner.Draw);
-//     gameActions.Add("IncreaseEnergy()", ownCard.owner.IncreaseEnergy);
-//     gameActions.Add("DecreaseEnergy()", ownCard.owner.DecreaseEnergy);
-//     gameActions.Add("enemyDraw()", enemyCard.owner.Draw);
-//     gameActions.Add("enemyIncreaseEnergy()", enemyCard.owner.IncreaseEnergy);
-//     gameActions.Add("enemyDecreaseEnergy()", enemyCard.owner.DecreaseEnergy);
-// }
-
-// public static void UpdateGameActionsDic(Card ownCard, Card enemyCard)
-// {
-//     gameActions["Draw()"] = ownCard.owner.Draw;
-//     gameActions["IncreaseEnergy()"] = ownCard.owner.IncreaseEnergy;
-//     gameActions["DecreaseEnergy()"] = ownCard.owner.DecreaseEnergy;
-//     gameActions["enemyDraw()"] = enemyCard.owner.Draw;
-//     gameActions["enemyIncreaseEnergy()"] = enemyCard.owner.IncreaseEnergy;
-//     gameActions["enemyDecreaseEnergy()"] = enemyCard.owner.DecreaseEnergy;
-// }
-
-// public static void FillGameStatsDic()
-// {
-//     cardsStatsDic.Add("ownCard.Health", 0);
-//     cardsStatsDic.Add("ownCard.MaxHealth", 0);
-//     cardsStatsDic.Add("ownCard.AttackValue", 0);
-//     cardsStatsDic.Add("ownCard.MaxAttackValue", 0);
-
-//     cardsStatsDic.Add("enemyCard.Health", 0);
-//     cardsStatsDic.Add("enemyCard.MaxHealth", 0);
-//     cardsStatsDic.Add("enemyCard.AttackValue", 0);
-//     cardsStatsDic.Add("enemyCard.MaxAttackValue", 0);
-
-//     cardsStatsDic.Add("NOCInPlayerHand", 0);
-//     cardsStatsDic.Add("NOCInEnemyPlayerHand", 0);
-//     cardsStatsDic.Add("NOCInPlayerField", 0);
-//     cardsStatsDic.Add("NOCInEnemyPlayerField", 0);
-
-// }
-
-
-// public static void UpdateGameStatsDic(Card ownCard, Card enemyCard, Game gameState)
-// {
-//     cardsStatsDic["ownCard.Health"] = ownCard.Health;
-//     cardsStatsDic["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
-//     cardsStatsDic["ownCard.AttackValue"] = ownCard.AttackValue;
-//     cardsStatsDic["ownCard.MaxAttackValue"] = ownCard.MaxAttackValue;
-
-//     cardsStatsDic["ownCard.Health"] = enemyCard.Health;
-//     cardsStatsDic["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
-//     cardsStatsDic["ownCard.AttackValue"] = enemyCard.AttackValue;
-//     cardsStatsDic["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
-
-//     cardsStatsDic["NOCInPlayerHand"] = ownCard.owner.Hand.Count;
-//     cardsStatsDic["NOCInEnemyPlayerHand"] = enemyCard.owner.Hand.Count;
-//     cardsStatsDic["NOCInPlayerField"] = GetNOCInPlayerField(gameState, ownCard.owner);
-//     cardsStatsDic["NOCInEnemyPlayerField"] = GetNOCInPlayerField(gameState, enemyCard.owner);
-
-//     cardsStatsDic["PlayerEnergy"] = ownCard.owner.Energy;
-//     cardsStatsDic["EnemyPlayerEnergy"] = enemyCard.owner.Energy;
-
-//     cardsStatsDic["NOCInPlayerDeck"] = ownCard.owner.Deck.Count;
-//     cardsStatsDic["NOCInEnemyPlayerDeck"] = enemyCard.owner.Deck.Count;
-
-// }
-
-
-// static int GetNOCInPlayerField(Game gameState, Player player)
-// {
-//     return gameState.Board[player].Count;
-// }
-// //esto es para modificar las estadisticas de las cartas 
-// public static void UpdateCardStats(Card ownCard, Card enemyCard)
-// {
-//     ownCard.Health = cardsStatsDic["ownCard.Health"];
-//     ownCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
-//     ownCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
-//     ownCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
-
-//     enemyCard.Health = cardsStatsDic["ownCard.Health"];
-//     enemyCard.MaxHealthValue = cardsStatsDic["ownCard.MaxHealthValue"];
-//     enemyCard.AttackValue = cardsStatsDic["ownCard.AttackValue"];
-//     enemyCard.MaxAttackValue = cardsStatsDic["ownCard.MaxAttackValue"];
-// }
-

@@ -5,16 +5,18 @@ public class Player
     public const int MinEnergy = 0;
     public const int InitialEnergy = 3;
     public string Name;
+    public int Number;
     public int Energy;
     public Queue<Card> Deck;
     public List<Card> Hand;
     public bool IsAI;
-    public Player(string name, Queue<Card> deck, bool IsAI)
+    public Player(string name, Queue<Card> deck, int playerNumber, bool IsAI)
     {
         Name = name;
         Energy = InitialEnergy;
         Deck = deck;
         Hand = new();
+        Number = playerNumber;
         this.IsAI = IsAI;
     }
 
@@ -25,8 +27,6 @@ public class Player
             board[this].Add(card);
             Hand.Remove(card);
         }
-
-        Energy--;
     }
 
     public void Draw()
@@ -37,5 +37,8 @@ public class Player
     public void IncreaseEnergy() => Energy++;
 
     public void DecreaseEnergy() => Energy--;
+    public void IncreaseEnergy(int x = 1) => Energy += x;
+
+    public void DecreaseEnergy(int x = 1) => Energy -= x;
 
 }

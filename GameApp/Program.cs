@@ -1,6 +1,7 @@
 ﻿using GameLibrary;
 using GameLibrary.Objects;
 using MiniCompiler;
+using Spectre.Console;
 
 
 namespace GameApp;
@@ -9,36 +10,70 @@ class Program
 {
     static void Main(string[] args)
     {
+        Console.WriteLine("//////Welcome//////");
+        Print.PressEnterToContinue();
+
+        Console.WriteLine("Want to play versus AI ?(press: 1 = true,0 = false)");
+        bool wantIA = UtilsForConsole.UserAnswer() ? true : false;
+
+        Console.WriteLine("Creating Decks...");
         var deck1 = Start.GenerateDeck(4);
         var deck2 = Start.GenerateDeck(4);
-        //testing the compiler by adding a new card to the deck1
-        string userCodeInput = "Name: Franco Hernandez ; InitialATK: 10 ; InitialHealth: 20 ; InitialSpecie: Angel ; ownCard.Health = enemyCard.MaxHealth ;";
 
-        Interpreter interpreter = new Interpreter();//agregar TokenType.NONE para no tener angel por default
+        Console.WriteLine("Want to create your own Card/Cards?(press: 1 = true ,0 = false");
+        bool wantCreateCard = UtilsForConsole.UserAnswer() ? true : false;
 
-        Player player1 = new ConsolePlayer(new Player("Franco", deck1, false));
-        Player player2 = new ConsolePlayer(new Player("Magela", deck2, false));
+        Player player1 = new ConsolePlayer(new Player("Franco", deck1, 1, false));
+        Player player2 = new ConsolePlayer(new Player("Magela", deck2, 2, false));
 
-        //ve entendiendo la implementacion,abstraete de como funciona,por ahora,poco a poco voy haciendolo mas legible
-        interpreter.EatUserCode(userCodeInput);//cada nuevo codigo es introducido en este metodo
-        deck1.Enqueue(interpreter.BuildCard(player1));//este metodo crea una nueva carta segun el codigo metido en el metodo anterior
-        IEffect clientEffect = interpreter.BuildEffect();//este metodo crea un nuevo efecto segun el codigo metido dos lineas mas arriba
-        //cada vez q quieras crear una nueva carta o efecto,hay q usar el metodo EatCode q interpreta el codigo para poder crear cartas y efectos en base a el ultimo codigo "comido
+        //entradas de usuario de prueba 
+        string CardAndEffect = "Name: Franco Hernandez ; InitialATK: 10 ; InitialHealth: 20 ; InitialSpecie: Angel ; ";
+        string Card = "Name: Magela Cornelio ; InitialATK: 2 ; InitialHealth: 50 ; InitialSpecie: Angel ;";
+        string Effect = "EffectName: Personalized Effect ; IF: ownCard.Health ownCard.MaxHealth < ; ownCard.MaxHealth = 5 4 + 1 - ; ownCard.AttackValue = ownCard.MaxAttackValue ;";
 
+        // adding cards to a list to test the interpreter
+        List<Card> listOfCardExperiment = new List<Card>();
+        if (wantCreateCard)
+        {
+            Interpreter interpreter = new Interpreter();
 
-        bool wantIA = false;//preguntar si quiere jugar vs IA
+            Console.WriteLine("Select the amount of Cards to create");
+            int amountOfCards = 1;
+            for (int i = 0; i < amountOfCards; i++)
+            {
+                Console.WriteLine($"Write the code of the Card Number {i + 1} :");
+                interpreter.EatUserCode(Card);
+                listOfCardExperiment.Add(interpreter.BuildCard());
+                interpreter.BuildEffect(listOfCardExperiment[i]);
+                Console.WriteLine("Card Created !!");
+                Console.WriteLine();
+                Console.WriteLine("Want to add more effects to this Card? (press 1 = true, 0 = false)");
+                if (UtilsForConsole.UserAnswer())
+                {
+                    Console.WriteLine("Write the number of Effets to be added");
+                    int amountOfAditionalEffects = 1;
+                    for (int j = 1; j <= amountOfAditionalEffects; j++)
+                    {
+                        Console.WriteLine($"Write the code of the Effect number {j + 1} :");
+                        interpreter.EatUserCode(Effect);
+                        interpreter.BuildEffect(listOfCardExperiment[i]);
+                        Console.WriteLine("Effect Added !!");
+                    }
+                }
+            }
+        }
 
         if (wantIA)
-            player2 = new ConsolePlayer(new Player("IA", deck2, true));
+            player2 = new ConsolePlayer(new Player("IA", deck2, 2, true));
         else
             player2.Name = "Magela";
 
         var game = new Game(player1, player2);
 
+        Console.WriteLine("//////////START////////////");
         int drawEvery = 2;
         while (!Rules.IsEndOfGame(player1, player2, game))
         {
-
             Player currentPlayer = Game.GetPlayerTurnOrder(player1, player2, game.TurnCounter)[0];
             Player enemyPlayer = Game.GetPlayerTurnOrder(player1, player2, game.TurnCounter)[1];
 
@@ -68,6 +103,8 @@ class Program
             System.Console.WriteLine();
             System.Console.WriteLine("////// End Turn //////");
             System.Console.WriteLine();
+
+            Console.Clear();
             game.EndTurn();
         }
     }

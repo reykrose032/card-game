@@ -23,9 +23,30 @@ public static class UtilsForConsole
         else
             return true;
     }
+
+    public static bool UserAnswer()
+    {
+        while (true)
+        {
+            string answer = Console.ReadLine();
+
+            if (answer == "1")
+                return true;
+            else if (answer == "0")
+                return false;
+            else
+                Console.WriteLine("please,select a valid option");
+        }
+    }
 }
 public static class Print
 {
+    public static void PressEnterToContinue()
+    {
+        Console.WriteLine();
+        Console.WriteLine("presione Enter para continuar...");
+        Console.ReadKey();
+    }
     public static void PlayerChoices(List<Card> list)
     {
         foreach (var card in list)//posible abstraccion
@@ -38,6 +59,13 @@ public static class Print
         foreach (var card in list)//posible abstraccion
         {
             Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.HealthValue} // ATK: {card.AttackValue} ");
+        }
+    }
+    public static void ShowCardEffects(Card card)
+    {
+        foreach (IEffect effect in card.Effects)
+        {
+            Console.WriteLine($"{card.Effects.IndexOf(effect)} - {effect.Name} ");//anadir una descripcion de lo q hace el effecto o algo asi
         }
     }
     public static void PrintPossibleUserActions(List<string> actions)

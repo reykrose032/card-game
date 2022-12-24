@@ -72,7 +72,7 @@ class Identifier : IExpr
     string key;
     public Identifier(string key) => this.key = key;
 
-    public int Evaluate() => GameData.cardsStatsDic[key];
+    public int Evaluate() => GameData.CardStats[key];
 }
 
 class Higher : BinaryExpr
@@ -180,7 +180,7 @@ class Assignment : Iinstruction
     }
     public void Execute()
     {
-        GameData.cardsStatsDic[leftIdentifier.value] = rightExpr.Evaluate();
+        GameData.CardStats[leftIdentifier.value] = rightExpr.Evaluate();
     }
 }
 
@@ -194,10 +194,10 @@ class Action : Iinstruction
     }
     public void Execute()
     {
-        GameData.gameActions[stringAction.value]();
+        GameData.GameActions[stringAction.value]();
     }
 }
-class ClientEffectInstructions : Iinstruction
+class ClientEffectInstructionsAST : Iinstruction
 {
     public List<Iinstruction> instructions = new List<Iinstruction>();
 
