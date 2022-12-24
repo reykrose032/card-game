@@ -15,10 +15,10 @@ public class Card
     public Card(string name, int attackValue, int health, Species specie)
     {
         Name = name;
-        AttackValue = attackValue;
+        AttackValue = attackValue <= MaxAttack && attackValue >= MinAttack ? attackValue : throw new ArgumentException();
         MaxAttackValue = attackValue;
         HealthValue = health;
-        MaxHealthValue = HealthValue;
+        MaxHealthValue = HealthValue <= MaxHealth && HealthValue >= MinHealth ? HealthValue : throw new ArgumentException();
         Specie = specie;
     }
     public Card(string name, Species species)

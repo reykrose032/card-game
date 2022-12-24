@@ -44,21 +44,23 @@ public static class Print
     public static void PressEnterToContinue()
     {
         Console.WriteLine();
-        Console.WriteLine("presione Enter para continuar...");
+        Console.WriteLine("Press Enter to continue...");
         Console.ReadKey();
     }
-    public static void PlayerChoices(List<Card> list)
+    public static void ShowPlayerEnergy(Player currentPlayer)
     {
-        foreach (var card in list)//posible abstraccion
-        {
-            Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.HealthValue} // ATK: {card.AttackValue} ");
-        }
+        Console.WriteLine($"{currentPlayer.Name} Energy: {currentPlayer.Energy}");
     }
     public static void ShowPlayerCards(List<Card> list)
     {
         foreach (var card in list)//posible abstraccion
         {
-            Console.WriteLine($"{list.IndexOf(card)} - {card.Name} // Health: {card.HealthValue} // ATK: {card.AttackValue} ");
+            Console.Write($"{list.IndexOf(card)} - {card.Name} // Health: {card.HealthValue}/{card.MaxHealthValue} // ATK: {card.AttackValue}/{card.MaxAttackValue} ||");
+            foreach (IEffect effect in card.Effects)
+            {
+                Console.Write($" {effect.Name} Effect //");
+            }
+            Console.WriteLine();
         }
     }
     public static void ShowCardEffects(Card card)
@@ -96,6 +98,8 @@ public static class Print
     }
     public static void GameInformation(Player currentPlayer, Player enemyPlayer, Game Game)
     {
+        Console.WriteLine();
+        Print.ShowPlayerEnergy(currentPlayer);
         Console.WriteLine();
         Print.Hand(currentPlayer);
         Console.WriteLine();

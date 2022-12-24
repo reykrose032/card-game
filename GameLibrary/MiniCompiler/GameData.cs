@@ -10,12 +10,12 @@ public static class GameData
     public static void PreparingGameActionsDic()
     {
         void Void() { }
-        GameActions.Add("Draw()", Void);
-        GameActions.Add("IncreaseEnergy()", Void);
-        GameActions.Add("DecreaseEnergy()", Void);
-        GameActions.Add("enemyDraw()", Void);
-        GameActions.Add("enemyIncreaseEnergy()", Void);
-        GameActions.Add("enemyDecreaseEnergy()", Void);
+        GameActions.Add("Draw(Player1)", Void);
+        GameActions.Add("Draw(Player2)", Void);
+        GameActions.Add("IncreaseEnergy(Player1)", Void);
+        GameActions.Add("IncreaseEnergy(Player2)", Void);
+        GameActions.Add("DecreaseEnergy(Player1)", Void);
+        GameActions.Add("DecreaseEnergy(Player2)", Void);
     }
 
     public static void PreparingGameStatsDic()
@@ -25,10 +25,10 @@ public static class GameData
         CardStats.Add("ownCard.AttackValue", 0);
         CardStats.Add("ownCard.MaxAttackValue", 0);
 
-        CardStats.Add("enemyCard.Health", 0);
-        CardStats.Add("enemyCard.MaxHealth", 0);
-        CardStats.Add("enemyCard.AttackValue", 0);
-        CardStats.Add("enemyCard.MaxAttackValue", 0);
+        CardStats.Add("targetCard.Health", 0);
+        CardStats.Add("targetCard.MaxHealth", 0);
+        CardStats.Add("targetCard.AttackValue", 0);
+        CardStats.Add("targetCard.MaxAttackValue", 0);
 
         CardStats.Add("NOCInPlayerHand", 0);
         CardStats.Add("NOCInEnemyPlayerHand", 0);
@@ -37,7 +37,7 @@ public static class GameData
 
     }
 
-    public static void UpdatingGameActionsDic(Card ownCard, Card enemyCard, Game gameState)
+    public static void UpdatingGameActionsDic(Card ownCard, Card targetCard, Game gameState)
     {
         GameActions["Draw(Player1)"] = gameState.Player1.Draw;
         GameActions["Draw(Player2)"] = gameState.Player2.Draw;
@@ -47,17 +47,17 @@ public static class GameData
         GameActions["DecreaseEnergy(Player2)"] = gameState.Player2.DecreaseEnergy;
     }
 
-    public static void UpdatingGameStatsDic(Card ownCard, Card enemyCard, Game gameState)
+    public static void UpdatingGameStatsDic(Card ownCard, Card targetCard, Game gameState)
     {
         CardStats["ownCard.Health"] = ownCard.HealthValue;
         CardStats["ownCard.MaxHealthValue"] = ownCard.MaxHealthValue;
         CardStats["ownCard.AttackValue"] = ownCard.AttackValue;
         CardStats["ownCard.MaxAttackValue"] = ownCard.MaxAttackValue;
 
-        CardStats["ownCard.Health"] = enemyCard.HealthValue;
-        CardStats["ownCard.MaxHealthValue"] = enemyCard.MaxHealthValue;
-        CardStats["ownCard.AttackValue"] = enemyCard.AttackValue;
-        CardStats["ownCard.MaxAttackValue"] = enemyCard.MaxAttackValue;
+        CardStats["targetCard.Health"] = targetCard.HealthValue;
+        CardStats["targetCard.MaxHealthValue"] = targetCard.MaxHealthValue;
+        CardStats["targetCard.AttackValue"] = targetCard.AttackValue;
+        CardStats["targetCard.MaxAttackValue"] = targetCard.MaxAttackValue;
 
         //note: NOC=number of cards
         CardStats["NOCInHand(Player1)"] = gameState.Player1.Hand.Count;
@@ -73,17 +73,17 @@ public static class GameData
 
     }
     //esto es para modificar las estadisticas de las cartas 
-    public static void UpdateCardStats(Card ownCard, Card enemyCard)
+    public static void UpdateCardStats(Card ownCard, Card targetCard)
     {
         ownCard.HealthValue = CardStats["ownCard.Health"];
         ownCard.MaxHealthValue = CardStats["ownCard.MaxHealthValue"];
         ownCard.AttackValue = CardStats["ownCard.AttackValue"];
         ownCard.MaxAttackValue = CardStats["ownCard.MaxAttackValue"];
 
-        enemyCard.HealthValue = CardStats["ownCard.Health"];
-        enemyCard.MaxHealthValue = CardStats["ownCard.MaxHealthValue"];
-        enemyCard.AttackValue = CardStats["ownCard.AttackValue"];
-        enemyCard.MaxAttackValue = CardStats["ownCard.MaxAttackValue"];
+        targetCard.HealthValue = CardStats["targetCard.Health"];
+        targetCard.MaxHealthValue = CardStats["targetCard.MaxHealthValue"];
+        targetCard.AttackValue = CardStats["targetCard.AttackValue"];
+        targetCard.MaxAttackValue = CardStats["targetCard.MaxAttackValue"];
     }
 
     ///////////////////////// Auxiliar Methods ////////////////////////////

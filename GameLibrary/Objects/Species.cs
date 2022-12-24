@@ -1,4 +1,4 @@
-namespace GameLibrary;
+namespace GameLibrary.Objects;
 
 public enum Species
 {

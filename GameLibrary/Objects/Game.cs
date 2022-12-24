@@ -63,8 +63,11 @@ public class Game
 
     public static bool Draw(int TurnCounter, int count, Player one, Player two)
     {
+
         if (TurnCounter % count == 0)
         {
+            one.IncreaseEnergy(2);
+            two.IncreaseEnergy(2);
             one.Draw();
             two.Draw();
             return true;

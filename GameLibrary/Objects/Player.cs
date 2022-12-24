@@ -10,10 +10,10 @@ public class Player
     public Queue<Card> Deck;
     public List<Card> Hand;
     public bool IsAI;
-    public Player(string name, Queue<Card> deck, int playerNumber, bool IsAI)
+    public Player(string name, Queue<Card> deck, int playerNumber, bool IsAI, int energy = InitialEnergy)
     {
         Name = name;
-        Energy = InitialEnergy;
+        Energy = energy;
         Deck = deck;
         Hand = new();
         Number = playerNumber;

@@ -8,6 +8,15 @@ public class Start
         var random = new Random();
         var cardSpecies = (Species)species.GetValue(random.Next(species.Length));
         var card = new Card(cardSpecies.ToString(), cardSpecies);
+        if (DefaultEffects.Count == 0)
+            FillDefaultEffectList();
+        for (int i = random.Next(DefaultEffects.Count); i < DefaultEffects.Count; i++)
+        {
+            IEffect temp = DefaultEffects[random.Next(DefaultEffects.Count)];
+            if (!card.Effects.Contains(temp))
+                card.Effects.Add(temp);
+        }
+
         return card;
     }
 
@@ -20,4 +29,12 @@ public class Start
         }
         return cards;
     }
+
+    private static List<IEffect> DefaultEffects = new List<IEffect>();
+    private static void FillDefaultEffectList()
+    {
+        DefaultEffects.Add(new Weaken());
+        DefaultEffects.Add(new Heal());
+    }
+
 }

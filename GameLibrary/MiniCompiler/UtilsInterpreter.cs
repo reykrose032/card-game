@@ -1,4 +1,4 @@
-using GameLibrary;
+using GameLibrary.Objects;
 
 namespace MiniCompiler;
 public static class UtilsForInterpreter
