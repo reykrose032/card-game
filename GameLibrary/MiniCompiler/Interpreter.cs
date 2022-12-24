@@ -33,7 +33,7 @@ namespace MiniCompiler
         public void BuildEffect(Card card)
         {
             if (userCardEffect.instructions.Count > 0)
-                card.Effects.Add(new ClientEffect(newEffectName, userCardEffect));
+                card.Effects.Add(new UserEffect(newEffectName, userCardEffect));
         }
 
         private void Tokenizing(string input)

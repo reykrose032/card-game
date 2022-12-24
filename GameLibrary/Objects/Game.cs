@@ -20,7 +20,7 @@ public class Game
         Board.Add(Player1, new List<Card>());
         Board.Add(Player2, new List<Card>());
     }
-    public void UpdateBoard()
+    public void UpdateBoard() // destruye cartas con vida negativa 
     {
         foreach (var playerBoard in Board.Values)
         {
@@ -61,7 +61,7 @@ public class Game
         return players;
     }
 
-    public static bool Draw(int TurnCounter, int count, Player one, Player two)
+    public static bool IsBeginningOfTurn(int TurnCounter, int count, Player one, Player two)
     {
 
         if (TurnCounter % count == 0)

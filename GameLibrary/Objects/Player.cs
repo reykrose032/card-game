@@ -4,11 +4,11 @@ public class Player
 {
     public const int MinEnergy = 0;
     public const int InitialEnergy = 3;
-    public string Name;
-    public int Number;
-    public int Energy;
-    public Queue<Card> Deck;
-    public List<Card> Hand;
+    public string Name { get; }
+    public int Number { get; }
+    public int Energy { get; private set; }
+    public Queue<Card> Deck { get; set; }
+    public List<Card> Hand { get; set; }
     public bool IsAI;
     public Player(string name, Queue<Card> deck, int playerNumber, bool IsAI, int energy = InitialEnergy)
     {

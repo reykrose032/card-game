@@ -64,7 +64,7 @@ public static class AI
         return random.Next(ownCard.Effects.Count);
     }
     public static bool WantCastEffect(Player currentPlayer, Player enemyPlayer, Game game)
-    {
+    {//mejorar mas adelante
         Random random = new Random();
         return random.Next(2) == 1;
     }

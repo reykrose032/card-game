@@ -82,7 +82,7 @@ class Program
             Player currentPlayer = Game.GetPlayerTurnOrder(player1, player2, game.TurnCounter)[0];
             Player enemyPlayer = Game.GetPlayerTurnOrder(player1, player2, game.TurnCounter)[1];
 
-            if (Game.Draw(game.TurnCounter, drawEvery, player1, player2))
+            if (Game.IsBeginningOfTurn(game.TurnCounter, drawEvery, player1, player2))
             {
                 System.Console.WriteLine("//// Draw Phase ////");
                 System.Console.WriteLine();
