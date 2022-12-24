@@ -15,7 +15,7 @@ class Program
         Print.PressEnterToContinue();
         Console.Clear();
         Console.WriteLine("Would you like to play against AI? (press: 1 = true,0 = false)");
-        bool wantIA = UtilsForConsole.UserAnswer() ? true : false;
+        bool wantIA = UtilsForConsole.UserAnswer();
         Console.WriteLine();
         Console.WriteLine("Creating Decks...");
         var deck1 = Start.GenerateDeck(4);
